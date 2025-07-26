@@ -17,7 +17,7 @@ class Playlist:
     title: str
     description: str
     genre: str
-    playlist: List[Tuple[str, str]]
+    tracks: List[Tuple[str, str]]
 
 
 def get_playlists(directory: str) -> Generator[Playlist]:
@@ -52,7 +52,7 @@ def load_playlist(filepath: Path) -> Playlist:
         title=data['title'],
         description=data['description'],
         genre=data['genre'],
-        playlist=[get_artist_album_from_entry(entry) for entry in data['playlist']]
+        tracks=[get_artist_album_from_entry(entry) for entry in data['playlist']]
     )
 
 

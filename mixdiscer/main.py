@@ -8,6 +8,8 @@ from mixdiscer.configuration import (
     load_config,
     MIXDISC_DIRECTORY_CONFIG,
     PLAYLIST_DURATION_THRESHOLD_CONFIG,
+    TEMPLATE_DIR_CONFIG,
+    OUTPUT_DIR_CONFIG,
 )
 from mixdiscer.playlists import get_playlists
 from mixdiscer.music_service import (
@@ -45,6 +47,8 @@ def run(config_path: str):
     playlist_duration_threshold = timedelta(
         minutes=config.get(PLAYLIST_DURATION_THRESHOLD_CONFIG)
     )
+    template_dir = Path(config.get(TEMPLATE_DIR_CONFIG))
+    output_dir = Path(config.get(OUTPUT_DIR_CONFIG))
 
     spotify_music_service: MusicService = SpotifyMusicService()
 
@@ -90,4 +94,4 @@ def run(config_path: str):
             len(over_duration_playlists)
         )
 
-    render_output(output, Path("site_files"))
+    render_output(output, output_dir, template_dir)

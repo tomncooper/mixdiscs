@@ -8,6 +8,27 @@ from typing import Optional, Sequence
 from mixdiscer.playlists import Playlist
 
 
+class MusicServiceError(Exception):
+    """ Exception raised for unrecoverable errors in music service operations.
+
+    Attributes:
+        message: explanation of the error
+        service_name: name of the music service raising the error
+        original_exception: the original exception that caused this error, if any
+    """
+
+    def __init__(
+            self,
+            message: str,
+            service_name: str,
+            original_exception: Optional[Exception] = None,
+    ) -> None:
+        self.message = message
+        self.service_name = service_name
+        self.original_exception = original_exception
+        super().__init__(f"[{service_name}] {message}")
+
+
 @dataclass
 class Track:
     """ Dataclass representing a Track and its metadata """
@@ -58,9 +79,29 @@ class MusicService(ABC):
     @abstractmethod
     def find_track(self, artist: str, track: str) -> Optional[Track]:
         """ Returns a Track object for the given artist and track.
-        If the track is not found, returns None """
+        If the track is not found because it is not present on the music
+        service then this method should return None. If there is any
+        other error which prevents finding the track then the method
+        should raise a MusicServiceError.
+
+        Arguments:
+            artist: The name of the performing artist
+            track: The title of the track
+
+        Returns:
+            A Track object representing the track or None if the track
+            is not found.
+        """
 
     @abstractmethod
     def process_user_playlist(self, playlist: Playlist) -> MusicServicePlaylist:
         """ Returns a MusicServicePlaylist containing that music services version
-        of the supplied user playlist """
+        of the supplied user playlist 
+
+        Arguments:
+            playlist: A user Playlist object containing the tracks to process
+
+        Returns:
+            A MusicServicePlaylist object containing the tracks and
+            other metadata for the playlist.
+        """

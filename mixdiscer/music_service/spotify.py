@@ -9,6 +9,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 from mixdiscer.music_service import MusicService, Track
 from mixdiscer.music_service.music_service import (
+    MusicServiceError,
     MusicServicePlaylist,
     calculate_total_duration
 )
@@ -61,8 +62,26 @@ class SpotifyMusicService(MusicService):
 
     def process_user_playlist(self, playlist) -> MusicServicePlaylist:
         """ Process a user playlist and return a MusicServicePlaylist """
-        tracks = [self.find_track(artist, track) for artist, track in playlist.playlist]
-        total_duration = calculate_total_duration(tracks)
+
+        tracks = []
+        total_duration = timedelta()
+
+        for artist, track in playlist.tracks:
+            spotify_track = None
+            try:
+                spotify_track = self.find_track(artist, track)
+                tracks.append(spotify_track)
+            except Exception as e:
+                msg = f"Error finding track {artist} - {track}: {e}"
+                LOG.error(msg)
+                raise MusicServiceError(
+                    message=msg,
+                    service_name=self.name,
+                    original_exception=e
+                ) from e
+
+            if spotify_track is not None:
+                total_duration += spotify_track.duration
 
         return MusicServicePlaylist(
             service_name=self.name,
