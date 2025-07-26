@@ -14,3 +14,9 @@ To run locally you will need to export envars containing your spotify credential
  export SPOTIPY_CLIENT_ID='<client-id>'
  export SPOTIPY_CLIENT_SECRET='<client-secret>'
 ```
+
+You can then run the app with:
+
+```bash
+uv run python app.py config.yaml
+```

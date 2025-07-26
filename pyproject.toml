@@ -5,6 +5,7 @@ description = "Playlists but nerdier!"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "jinja2>=3.1.6",
     "pyyaml>=6.0.2",
     "spotipy>=2.25.0",
 ]

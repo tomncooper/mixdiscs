@@ -6,6 +6,7 @@ import yaml
 LOG = logging.getLogger(__name__)
 
 MIXDISC_DIRECTORY_CONFIG = "mixdisc_directory"
+PLAYLIST_DURATION_THRESHOLD_CONFIG = "playlist_duration_threshold_mins"
 
 
 def load_config(filepath: str):

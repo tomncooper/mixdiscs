@@ -8,6 +8,10 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from mixdiscer.music_service import MusicService, Track
+from mixdiscer.music_service.music_service import (
+    MusicServicePlaylist,
+    calculate_total_duration
+)
 
 LOG = logging.getLogger(__name__)
 
@@ -15,9 +19,7 @@ LOG = logging.getLogger(__name__)
 @dataclass
 class SpotifyTrack(Track):
     """ Dataclass representing a Spotify Track and its metadata """
-
     uri: str
-    url: str
     track_id: str
 
 
@@ -28,12 +30,17 @@ class SpotifyMusicService(MusicService):
         self.auth_manager = SpotifyClientCredentials()
         self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
 
+    @property
+    def name(self) -> str:
+        """ Returns the name of the music service """
+        return "spotify"
+
     def find_track(self, artist: str, track: str) -> Optional[SpotifyTrack]:
         LOG.debug("Searching Spotify for track %s by %s", track, artist)
 
         results = self.spotify.search(q=f'artist:{artist} track:{track}', type='track')
 
-        if results['tracks']['total'] == 0:
+        if not results or results['tracks']['total'] == 0:
             LOG.warning("No tracks found for %s - %s", artist, track)
             return None        
 
@@ -47,11 +54,18 @@ class SpotifyMusicService(MusicService):
             title=first_track['name'],
             album=first_track['album']['name'],
             duration=timedelta(milliseconds=first_track['duration_ms']),
+            link=first_track['external_urls']['spotify'],
             uri=first_track['uri'],
-            url=first_track['external_urls']['spotify'],
-            track_id=first_track['id']
+            track_id=first_track['id'],
         )
 
-    def process_playlist(self, playlist) -> list[Optional[Track]]:
-        """ Returns a list of Track objects for the given playlist """
-        return [self.find_track(artist, track) for artist, track in playlist.playlist]
+    def process_user_playlist(self, playlist) -> MusicServicePlaylist:
+        """ Process a user playlist and return a MusicServicePlaylist """
+        tracks = [self.find_track(artist, track) for artist, track in playlist.playlist]
+        total_duration = calculate_total_duration(tracks)
+
+        return MusicServicePlaylist(
+            service_name=self.name,
+            tracks=tracks,
+            total_duration=total_duration
+        )

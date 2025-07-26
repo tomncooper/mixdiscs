@@ -1,1 +1,6 @@
-from .music_service import MusicService, Track
+from .music_service import (
+    Track,
+    MusicService,
+    MusicServicePlaylist,
+    ProcessedPlaylist,
+)

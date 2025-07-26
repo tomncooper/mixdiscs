@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixdiscer - Processed Playlists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .playlist {
+            background-color: white;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .playlist-header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+        }
+        .playlist-title {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .playlist-meta {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .duration {
+            font-family: monospace;
+        }
+        .link {
+            color: #1db954;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .no-link {
+            color: #999;
+            font-style: italic;
+        }
+        .service-header {
+            background-color: #1db954;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mixdiscs</h1>
+    <h2>Playlists...but nerdier</h2>
+    
+    {% if processed_playlists %}
+        {% for processed_playlist in processed_playlists %}
+            <div class="playlist">
+                <div class="playlist-header">
+                    <h2 class="playlist-title">{{ processed_playlist.user_playlist.title }}</h2>
+                    <div class="playlist-meta">
+                        by {{ processed_playlist.user_playlist.user }} | 
+                        Genre: {{ processed_playlist.user_playlist.genre }} | 
+                        {{ processed_playlist.user_playlist.description }}
+                    </div>
+                </div>
+                
+                {% for music_service_playlist in processed_playlist.music_service_playlists %}
+                    <div class="service-header">
+                        Music Service Playlist (Total Duration: {{ music_service_playlist.total_duration | duration_format }})
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Track</th>
+                                <th>Artist</th>
+                                <th>Album</th>
+                                <th>Duration</th>
+                                <th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for track in music_service_playlist.tracks %}
+                                <tr>
+                                    {% if track %}
+                                        <td>{{ track.title }}</td>
+                                        <td>{{ track.artist }}</td>
+                                        <td>{{ track.album or 'N/A' }}</td>
+                                        <td class="duration">{{ track.duration | duration_format }}</td>
+                                        <td>
+                                            {% if track.link %}
+                                                <a href="{{ track.link }}" target="_blank" class="link">{{ music_service_playlist.service_name }}</a>
+                                            {% else %}
+                                                <span class="no-link">No link</span>
+                                            {% endif %}
+                                        </td>
+                                    {% else %}
+                                        <td colspan="5" style="color: #999; font-style: italic;">Track not found</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No processed playlists found.</p>
+    {% endif %}
+</body>
+</html>

@@ -11,3 +11,6 @@ wheels/
 
 # Spotify API credentials
 .cache
+
+# Rendered output files
+site_files/
