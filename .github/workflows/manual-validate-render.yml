@@ -1,14 +1,22 @@
-name: Render Playlists
+name: Manual Validate and Render
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'mixdiscs/*/*.yaml'
+  workflow_dispatch:
+    inputs:
+      skip_errors:
+        description: 'Continue rendering even if some playlists fail'
+        required: false
+        type: boolean
+        default: true
+      validate_all:
+        description: 'Validate all playlists before rendering'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
-  render:
+  build:
+    if: inputs.validate_all
     runs-on: ubuntu-latest
     
     steps:
@@ -23,21 +31,20 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
       
-      - name: Render playlists to HTML
+      - name: Validate all playlists
         env:
           SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
           SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
         run: |
-          uv run python app.py render config.yaml --skip-errors
-      
+          uv run python app.py run config.yaml
+
       - name: Upload static files as artifact
-        id: deployment
         uses: actions/upload-pages-artifact@v4
         with:
           path: site_files
 
   deploy:
-    needs: render
+    needs: build
     permissions:
       pages: write    
       id-token: write
