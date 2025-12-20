@@ -1,0 +1,24 @@
+name: 'Setup Python Environment'
+description: 'Checkout code, setup Python 3.13, and install uv'
+
+inputs:
+  fetch-depth:
+    description: 'Number of commits to fetch. 0 for all history'
+    required: false
+    default: '1'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.13'
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
