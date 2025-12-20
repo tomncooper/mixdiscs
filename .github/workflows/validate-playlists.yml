@@ -1,0 +1,58 @@
+name: Validate Playlists
+
+on:
+  pull_request:
+    paths:
+      - 'mixdiscs/*/*.yaml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Need full history to compare changes
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      
+      - name: Get changed playlist files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(./scripts/get_changed_playlists.sh origin/${{ github.base_ref }})
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "files=" >> $GITHUB_OUTPUT
+            echo "count=0" >> $GITHUB_OUTPUT
+          else
+            echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+            echo "count=$(echo $CHANGED_FILES | wc -w)" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Validate playlists
+        if: steps.changed-files.outputs.count != '0'
+        env:
+          SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
+          SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
+        run: |
+          FILES="${{ steps.changed-files.outputs.files }}"
+          uv run python app.py validate config.yaml --files $FILES
+      
+      - name: Comment PR with results
+        if: failure() && steps.changed-files.outputs.count != '0'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Playlist validation failed. Please check the workflow logs for details.'
+            })
