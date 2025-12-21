@@ -9,8 +9,10 @@ wheels/
 # Virtual environments
 .venv
 
-# Spotify API credentials
+# Spotify API credentials (spotipy oauth cache)
 .cache
 
 # Rendered output files
 site_files/
+
+# Note: .playlist_cache/ is NOT ignored - it should be committed

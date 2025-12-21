@@ -10,6 +10,7 @@ from mixdiscer.configuration import (
     PLAYLIST_DURATION_THRESHOLD_CONFIG,
     TEMPLATE_DIR_CONFIG,
     OUTPUT_DIR_CONFIG,
+    CACHE_FILE_CONFIG,
 )
 from mixdiscer.playlists import get_playlists, get_playlists_from_paths, check_playlist_uniqueness
 from mixdiscer.music_service import (
@@ -21,6 +22,15 @@ from mixdiscer.music_service import (
 from mixdiscer.music_service.spotify import SpotifyMusicService
 from mixdiscer.output.render import render_output
 from mixdiscer.validation import ValidationResult
+from mixdiscer.cache import (
+    get_cache_key,
+    load_cache,
+    save_cache,
+    is_cache_valid,
+    get_cached_music_service_playlist,
+    update_cache_entry,
+    cleanup_stale_cache_entries,
+)
 
 LOG = logging.getLogger(__name__)
 
@@ -38,7 +48,7 @@ def calculate_duration(tracks: list[Optional[Track]]) -> timedelta:
     return total_duration
 
 
-def _load_rendering_config(config_path: str) -> tuple[str, Path, Path, timedelta]:
+def _load_rendering_config(config_path: str) -> tuple[str, Path, Path, timedelta, Path]:
     """
     Load configuration for rendering operations.
     
@@ -46,7 +56,7 @@ def _load_rendering_config(config_path: str) -> tuple[str, Path, Path, timedelta
         config_path: Path to configuration file
         
     Returns:
-        tuple: (mixdisc_directory, template_dir, output_dir, duration_threshold)
+        tuple: (mixdisc_directory, template_dir, output_dir, duration_threshold, cache_path)
     """
     config = load_config(config_path)
     mixdisc_directory = config.get(MIXDISC_DIRECTORY_CONFIG)
@@ -55,7 +65,8 @@ def _load_rendering_config(config_path: str) -> tuple[str, Path, Path, timedelta
     duration_threshold = timedelta(
         minutes=config.get(PLAYLIST_DURATION_THRESHOLD_CONFIG)
     )
-    return mixdisc_directory, template_dir, output_dir, duration_threshold
+    cache_path = Path(config.get(CACHE_FILE_CONFIG, '.playlist_cache/playlists_cache.json'))
+    return mixdisc_directory, template_dir, output_dir, duration_threshold, cache_path
 
 
 def _get_music_service() -> MusicService:
@@ -71,13 +82,21 @@ def _get_music_service() -> MusicService:
     return SpotifyMusicService()
 
 
-def _process_single_playlist(playlist, music_service: MusicService) -> ProcessedPlaylist:
+def _process_single_playlist(
+    playlist,
+    music_service: MusicService,
+    cache_key: Optional[str] = None,
+    cache_data: Optional[dict] = None
+) -> ProcessedPlaylist:
     """
     Process a single playlist with a music service.
+    Uses cache if available and valid.
     
     Args:
         playlist: Playlist object to process
         music_service: Music service to use for processing
+        cache_key: Optional cache key for lookup
+        cache_data: Optional cache data dictionary
         
     Returns:
         ProcessedPlaylist with music service data populated
@@ -87,6 +106,19 @@ def _process_single_playlist(playlist, music_service: MusicService) -> Processed
         music_service_playlists=[]
     )
     
+    # Try cache first
+    if cache_key and cache_data:
+        cached_playlist = get_cached_music_service_playlist(
+            cache_key,
+            music_service.name,
+            cache_data
+        )
+        if cached_playlist:
+            LOG.debug("Using cached data for %s (%s)", playlist.title, music_service.name)
+            processed_playlist.music_service_playlists.append(cached_playlist)
+            return processed_playlist
+    
+    # Cache miss - process normally
     music_service_playlist = music_service.process_user_playlist(playlist)
     processed_playlist.music_service_playlists.append(music_service_playlist)
     
@@ -118,12 +150,52 @@ def validate_playlist(
     playlist_path: Path,
     playlist,
     music_service: MusicService,
-    duration_threshold: timedelta
+    duration_threshold: timedelta,
+    cache_path: Optional[Path] = None,
+    skip_music_service_if_cached: bool = False
 ) -> ValidationResult:
-    """ Validate a single playlist and return validation result """
+    """ 
+    Validate a single playlist and optionally update cache.
+    
+    Args:
+        playlist_path: Path to playlist file
+        playlist: Loaded Playlist object
+        music_service: Music service to use for validation
+        duration_threshold: Maximum allowed duration
+        cache_path: Path to cache file (for updates)
+        skip_music_service_if_cached: If True, use cached data if unchanged
+    """
 
     try:
-        music_service_playlist = music_service.process_user_playlist(playlist)
+        # Check if we can use cache to skip music service calls
+        music_service_playlist = None
+        used_cache = False
+        
+        if skip_music_service_if_cached and cache_path:
+            cache_data = load_cache(cache_path)
+            cache_key = get_cache_key(playlist)
+            cache_entry = cache_data['playlists'].get(cache_key)
+            
+            if cache_entry and is_cache_valid(playlist, cache_entry):
+                # Playlist unchanged - use cached data
+                cached_playlist = get_cached_music_service_playlist(
+                    cache_key,
+                    music_service.name,
+                    cache_data
+                )
+                if cached_playlist:
+                    music_service_playlist = cached_playlist
+                    used_cache = True
+                    LOG.info("✓ [CACHE HIT] Using cached validation for %s", playlist.title)
+            else:
+                if cache_entry:
+                    LOG.info("⟳ [CACHE INVALID] Playlist changed, reprocessing %s", playlist.title)
+                else:
+                    LOG.info("⟳ [CACHE MISS] Processing %s with music service", playlist.title)
+        
+        # If not using cache, process with music service
+        if not music_service_playlist:
+            music_service_playlist = music_service.process_user_playlist(playlist)
 
         missing_tracks = [
             playlist.tracks[i] for i, track in enumerate(music_service_playlist.tracks)
@@ -131,6 +203,14 @@ def validate_playlist(
         ]
 
         is_valid = music_service_playlist.total_duration <= duration_threshold
+
+        # Update cache if cache_path provided and validation passed
+        if cache_path and is_valid and not used_cache:
+            cache_data = load_cache(cache_path)
+            cache_key = get_cache_key(playlist)
+            update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
+            save_cache(cache_data, cache_path)
+            LOG.debug("Updated cache for %s", playlist.title)
 
         return ValidationResult(
             filepath=playlist_path,
@@ -161,7 +241,7 @@ def run(config_path: str):
 
     LOG.info("Running Mixdiscer with config %s", config_path)
 
-    mixdisc_directory, template_dir, output_dir, playlist_duration_threshold = \
+    mixdisc_directory, template_dir, output_dir, playlist_duration_threshold, _ = \
         _load_rendering_config(config_path)
 
     music_service = _get_music_service()
@@ -206,7 +286,7 @@ def run(config_path: str):
     render_output(output, output_dir, template_dir)
 
 
-def render_all_playlists(config_path: str, skip_errors: bool = False) -> None:
+def render_all_playlists(config_path: str, skip_errors: bool = False, use_cache: bool = True) -> None:
     """
     Render all playlists to HTML without duration validation.
     
@@ -217,35 +297,63 @@ def render_all_playlists(config_path: str, skip_errors: bool = False) -> None:
     Args:
         config_path: Path to configuration file
         skip_errors: If True, continue rendering even if some playlists fail
+        use_cache: If True, use cached playlist data when available
     """
     
     LOG.info("Rendering all playlists from config %s", config_path)
     
-    mixdisc_directory, template_dir, output_dir, _ = _load_rendering_config(config_path)
+    mixdisc_directory, template_dir, output_dir, _, cache_path = _load_rendering_config(config_path)
     music_service = _get_music_service()
+    
+    # Load cache from configured path
+    cache_data = load_cache(cache_path) if use_cache else None
     
     processed_playlists: list[ProcessedPlaylist] = []
     failed_playlists: list[tuple[str, Exception]] = []
+    cache_hits = 0
+    cache_misses = 0
     
     # Get all playlists
     playlists = list(get_playlists(mixdisc_directory))
     LOG.info("Found %d playlists to render", len(playlists))
     
     # Process each playlist
+    cache_updated = False
     for playlist in playlists:
         try:
-            LOG.debug("Processing playlist: %s by %s", playlist.title, playlist.user)
+            cache_key = get_cache_key(playlist) if use_cache else None
+            is_cache_hit = False
             
-            processed_playlist = _process_single_playlist(playlist, music_service)
+            # Check cache validity
+            if cache_data and cache_key:
+                cache_entry = cache_data['playlists'].get(cache_key)
+                if cache_entry and is_cache_valid(playlist, cache_entry):
+                    cache_hits += 1
+                    is_cache_hit = True
+                    LOG.info("✓ [CACHE HIT] %s by %s", playlist.title, playlist.user)
+                else:
+                    cache_misses += 1
+                    LOG.info("⟳ [CACHE MISS] Processing %s by %s", playlist.title, playlist.user)
+            
+            processed_playlist = _process_single_playlist(
+                playlist,
+                music_service,
+                cache_key,
+                cache_data
+            )
             processed_playlists.append(processed_playlist)
             
             # Get the music service playlist (first one, as we only have Spotify now)
             music_service_playlist = processed_playlist.music_service_playlists[0]
             
-            LOG.info(
-                "✓ Rendered playlist: %s by %s (duration: %s, tracks: %d)",
+            # Update cache if this was a cache miss and caching is enabled
+            if cache_data and cache_key and not is_cache_hit:
+                update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
+                cache_updated = True
+            
+            LOG.debug(
+                "Rendered: %s (duration: %s, tracks: %d)",
                 playlist.title,
-                playlist.user,
                 music_service_playlist.total_duration,
                 len([t for t in music_service_playlist.tracks if t is not None])
             )
@@ -258,30 +366,64 @@ def render_all_playlists(config_path: str, skip_errors: bool = False) -> None:
             if not skip_errors:
                 raise Exception(f"{error_msg}: {e}") from e
     
+    # Save cache if it was updated or clean up stale entries
+    if cache_data and use_cache:
+        removed = cleanup_stale_cache_entries(cache_data, playlists)
+        if removed > 0:
+            LOG.info("Cleaned up %d stale cache entries", removed)
+            cache_updated = True
+        
+        if cache_updated:
+            save_cache(cache_data, cache_path)
+            LOG.debug("Cache saved to %s", cache_path)
+    
     # Render to HTML
     LOG.info("Rendering HTML output to %s", output_dir)
     render_output(processed_playlists, output_dir, template_dir)
     
-    # Summary
-    _log_rendering_summary(len(playlists), len(processed_playlists), failed_playlists, output_dir)
+    # Summary with cache stats
+    LOG.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    LOG.info("Rendering complete!")
+    LOG.info("  Total playlists: %d", len(playlists))
+    LOG.info("  Successfully rendered: %d", len(processed_playlists))
+    LOG.info("  Failed: %d", len(failed_playlists))
+    if use_cache:
+        LOG.info("  Cache hits: %d", cache_hits)
+        LOG.info("  Cache misses: %d", cache_misses)
+        LOG.info("  Cache efficiency: %.1f%%", (cache_hits / len(playlists) * 100) if playlists else 0)
+    LOG.info("  Output: %s/index.html", output_dir)
+    
+    if failed_playlists:
+        LOG.warning("Failed playlists:")
+        for playlist_name, error in failed_playlists:
+            LOG.warning("  - %s: %s", playlist_name, error)
     
     if failed_playlists and not skip_errors:
         raise Exception(f"Rendering completed with {len(failed_playlists)} errors")
 
 
-def validate_playlists_from_files(config_path: str, playlist_files: list[Path]) -> list[ValidationResult]:
-    """ Validate specific playlist files and return results """
+def validate_playlists_from_files(
+    config_path: str,
+    playlist_files: list[Path],
+    update_cache: bool = False
+) -> list[ValidationResult]:
+    """ Validate specific playlist files and optionally update cache """
 
     LOG.info("Validating %d playlist file(s)", len(playlist_files))
 
-    mixdisc_directory, _, _, playlist_duration_threshold = _load_rendering_config(config_path)
+    mixdisc_directory, _, _, playlist_duration_threshold, cache_path = _load_rendering_config(config_path)
     music_service = _get_music_service()
 
     results = []
 
-    # Load all existing playlists for uniqueness checking
-    existing_playlists = list(get_playlists(mixdisc_directory))
-    LOG.debug("Loaded %d existing playlists for uniqueness checking", len(existing_playlists))
+    # Load all existing playlists for uniqueness checking, EXCLUDING files being validated
+    # (to avoid detecting a file as duplicate of itself)
+    existing_playlists = []
+    for playlist in get_playlists(mixdisc_directory):
+        # Only include if this playlist file is NOT being validated
+        if playlist.filepath not in playlist_files:
+            existing_playlists.append(playlist)
+    LOG.debug("Loaded %d existing playlists for uniqueness checking (excluding files being validated)", len(existing_playlists))
 
     # Create a mapping of successfully loaded playlists
     loaded_playlists = {}
@@ -342,7 +484,9 @@ def validate_playlists_from_files(config_path: str, playlist_files: list[Path]) 
             playlist_path,
             playlist,
             music_service,
-            playlist_duration_threshold
+            playlist_duration_threshold,
+            cache_path=cache_path if update_cache else None,
+            skip_music_service_if_cached=update_cache  # Use cache during validation if updating cache
         )
         results.append(result)
 

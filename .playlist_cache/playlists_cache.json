@@ -1,0 +1,300 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-21T11:52:52.326309+00:00",
+  "playlists": {
+    "MixMasterTest/Testy McTest List": {
+      "user": "MixMasterTest",
+      "title": "Testy McTest List",
+      "filepath": "mixdiscs/MixMasterTest/MixMasterTest - Testy McTest List.yaml",
+      "content_hash": "cbab0d36c6f1fdbb8e31e9f54b9068ded4ba5cd9e3c46f973903d7334cb4ffc2",
+      "music_services": {
+        "spotify": {
+          "total_duration_seconds": 3463,
+          "tracks": [
+            {
+              "artist": "Michael Jackson",
+              "title": "Thriller",
+              "album": "Thriller 25 Super Deluxe Edition",
+              "duration_seconds": 357,
+              "link": "https://open.spotify.com/track/3S2R0EVwBSAVMd5UMgKTL0",
+              "service_specific": {
+                "uri": "spotify:track:3S2R0EVwBSAVMd5UMgKTL0",
+                "track_id": "3S2R0EVwBSAVMd5UMgKTL0"
+              }
+            },
+            {
+              "artist": "The Rolling Stones",
+              "title": "Gimme Shelter",
+              "album": "Let It Bleed",
+              "duration_seconds": 270,
+              "link": "https://open.spotify.com/track/6H3kDe7CGoWYBabAeVWGiD",
+              "service_specific": {
+                "uri": "spotify:track:6H3kDe7CGoWYBabAeVWGiD",
+                "track_id": "6H3kDe7CGoWYBabAeVWGiD"
+              }
+            },
+            {
+              "artist": "The Who",
+              "title": "Won't Get Fooled Again - Original Album Version",
+              "album": "Who's Next (Deluxe Edition)",
+              "duration_seconds": 511,
+              "link": "https://open.spotify.com/track/0cJPLFrlV7TTCyPLupHzcH",
+              "service_specific": {
+                "uri": "spotify:track:0cJPLFrlV7TTCyPLupHzcH",
+                "track_id": "0cJPLFrlV7TTCyPLupHzcH"
+              }
+            },
+            {
+              "artist": "Led Zeppelin",
+              "title": "Immigrant Song - Remaster",
+              "album": "Led Zeppelin III (Remaster)",
+              "duration_seconds": 146,
+              "link": "https://open.spotify.com/track/78lgmZwycJ3nzsdgmPPGNx",
+              "service_specific": {
+                "uri": "spotify:track:78lgmZwycJ3nzsdgmPPGNx",
+                "track_id": "78lgmZwycJ3nzsdgmPPGNx"
+              }
+            },
+            {
+              "artist": "Pink Floyd",
+              "title": "Wish You Were Here",
+              "album": "Wish You Were Here",
+              "duration_seconds": 338,
+              "link": "https://open.spotify.com/track/6mFkJmJqdDVQ1REhVfGgd1",
+              "service_specific": {
+                "uri": "spotify:track:6mFkJmJqdDVQ1REhVfGgd1",
+                "track_id": "6mFkJmJqdDVQ1REhVfGgd1"
+              }
+            },
+            {
+              "artist": "The Doors",
+              "title": "Riders on the Storm",
+              "album": "L.A. Woman",
+              "duration_seconds": 434,
+              "link": "https://open.spotify.com/track/14XWXWv5FoCbFzLksawpEe",
+              "service_specific": {
+                "uri": "spotify:track:14XWXWv5FoCbFzLksawpEe",
+                "track_id": "14XWXWv5FoCbFzLksawpEe"
+              }
+            },
+            {
+              "artist": "Eagles",
+              "title": "Hotel California - Live On MTV, 1994",
+              "album": "Hell Freezes Over (Remaster 2018)",
+              "duration_seconds": 432,
+              "link": "https://open.spotify.com/track/2GpBrAoCwt48fxjgjlzMd4",
+              "service_specific": {
+                "uri": "spotify:track:2GpBrAoCwt48fxjgjlzMd4",
+                "track_id": "2GpBrAoCwt48fxjgjlzMd4"
+              }
+            },
+            {
+              "artist": "Fleetwood Mac",
+              "title": "Go Your Own Way - 2004 Remaster",
+              "album": "Rumours",
+              "duration_seconds": 223,
+              "link": "https://open.spotify.com/track/07GvNcU1WdyZJq3XxP0kZa",
+              "service_specific": {
+                "uri": "spotify:track:07GvNcU1WdyZJq3XxP0kZa",
+                "track_id": "07GvNcU1WdyZJq3XxP0kZa"
+              }
+            },
+            {
+              "artist": "Queen",
+              "title": "Bohemian Rhapsody",
+              "album": "Bohemian Rhapsody (The Original Soundtrack)",
+              "duration_seconds": 354,
+              "link": "https://open.spotify.com/track/3z8h0TU7ReDPLIbEnYhWZb",
+              "service_specific": {
+                "uri": "spotify:track:3z8h0TU7ReDPLIbEnYhWZb",
+                "track_id": "3z8h0TU7ReDPLIbEnYhWZb"
+              }
+            },
+            {
+              "artist": "David Bowie",
+              "title": "Ziggy Stardust - 2012 Remaster",
+              "album": "The Rise and Fall of Ziggy Stardust and the Spiders from Mars (2012 Remaster)",
+              "duration_seconds": 193,
+              "link": "https://open.spotify.com/track/5IyL3XOaRPpTgxVjRIAxXU",
+              "service_specific": {
+                "uri": "spotify:track:5IyL3XOaRPpTgxVjRIAxXU",
+                "track_id": "5IyL3XOaRPpTgxVjRIAxXU"
+              }
+            },
+            {
+              "artist": "The Clash",
+              "title": "London Calling",
+              "album": "London Calling (Expanded Edition)",
+              "duration_seconds": 199,
+              "link": "https://open.spotify.com/track/124Y9LPRCAz3q2OP0iCvcJ",
+              "service_specific": {
+                "uri": "spotify:track:124Y9LPRCAz3q2OP0iCvcJ",
+                "track_id": "124Y9LPRCAz3q2OP0iCvcJ"
+              }
+            }
+          ],
+          "cached_at": "2025-12-21T11:51:49.350219+00:00"
+        }
+      },
+      "cached_at": "2025-12-21T11:47:50.551064+00:00"
+    },
+    "ElectroCurator/Late Night Circuits": {
+      "user": "ElectroCurator",
+      "title": "Late Night Circuits",
+      "filepath": "mixdiscs/ElectroCurator/ElectroCurator - Late Night Circuits.yaml",
+      "content_hash": "49dddbb92b62470f25bfb15e1e6c79e0cbf8635597d6441282e6857090d3e70d",
+      "music_services": {
+        "spotify": {
+          "total_duration_seconds": 4428,
+          "tracks": [
+            {
+              "artist": "Daft Punk",
+              "title": "One More Time",
+              "album": "Discovery",
+              "duration_seconds": 320,
+              "link": "https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV",
+              "service_specific": {
+                "uri": "spotify:track:0DiWol3AO6WpXZgp0goxAV",
+                "track_id": "0DiWol3AO6WpXZgp0goxAV"
+              }
+            },
+            {
+              "artist": "The Chemical Brothers",
+              "title": "Block Rockin' Beats",
+              "album": "Dig Your Own Hole",
+              "duration_seconds": 313,
+              "link": "https://open.spotify.com/track/1FNvrp5K02oThumS6gllzp",
+              "service_specific": {
+                "uri": "spotify:track:1FNvrp5K02oThumS6gllzp",
+                "track_id": "1FNvrp5K02oThumS6gllzp"
+              }
+            },
+            {
+              "artist": "Aphex Twin",
+              "title": "Windowlicker",
+              "album": "Windowlicker",
+              "duration_seconds": 365,
+              "link": "https://open.spotify.com/track/409z4jUHpq7eIkg3N3FzZh",
+              "service_specific": {
+                "uri": "spotify:track:409z4jUHpq7eIkg3N3FzZh",
+                "track_id": "409z4jUHpq7eIkg3N3FzZh"
+              }
+            },
+            {
+              "artist": "Moby",
+              "title": "Porcelain",
+              "album": "Play",
+              "duration_seconds": 241,
+              "link": "https://open.spotify.com/track/6EXi6ZqTITKGtVBKqbphjL",
+              "service_specific": {
+                "uri": "spotify:track:6EXi6ZqTITKGtVBKqbphjL",
+                "track_id": "6EXi6ZqTITKGtVBKqbphjL"
+              }
+            },
+            {
+              "artist": "Fatboy Slim",
+              "title": "Right Here, Right Now",
+              "album": "You've Come a Long Way Baby",
+              "duration_seconds": 387,
+              "link": "https://open.spotify.com/track/5Sh9v7RwibuV34tdjscwx5",
+              "service_specific": {
+                "uri": "spotify:track:5Sh9v7RwibuV34tdjscwx5",
+                "track_id": "5Sh9v7RwibuV34tdjscwx5"
+              }
+            },
+            {
+              "artist": "Underworld",
+              "title": "Born Slippy (Nuxx)",
+              "album": "1992 - 2012",
+              "duration_seconds": 456,
+              "link": "https://open.spotify.com/track/7xQYVjs4wZNdCwO0EeAWMC",
+              "service_specific": {
+                "uri": "spotify:track:7xQYVjs4wZNdCwO0EeAWMC",
+                "track_id": "7xQYVjs4wZNdCwO0EeAWMC"
+              }
+            },
+            {
+              "artist": "The Prodigy",
+              "title": "Breathe",
+              "album": "The Fat of the Land",
+              "duration_seconds": 336,
+              "link": "https://open.spotify.com/track/0Ja4hLKiUSw01E01pJ1yGr",
+              "service_specific": {
+                "uri": "spotify:track:0Ja4hLKiUSw01E01pJ1yGr",
+                "track_id": "0Ja4hLKiUSw01E01pJ1yGr"
+              }
+            },
+            {
+              "artist": "Orbital",
+              "title": "Halcyon & On - Jon Hopkins Remix",
+              "album": "30 Something",
+              "duration_seconds": 431,
+              "link": "https://open.spotify.com/track/3dsnJC7f8lA4NxXsb8LMOr",
+              "service_specific": {
+                "uri": "spotify:track:3dsnJC7f8lA4NxXsb8LMOr",
+                "track_id": "3dsnJC7f8lA4NxXsb8LMOr"
+              }
+            },
+            {
+              "artist": "Massive Attack",
+              "title": "Teardrop",
+              "album": "Mezzanine",
+              "duration_seconds": 330,
+              "link": "https://open.spotify.com/track/67Hna13dNDkZvBpTXRIaOJ",
+              "service_specific": {
+                "uri": "spotify:track:67Hna13dNDkZvBpTXRIaOJ",
+                "track_id": "67Hna13dNDkZvBpTXRIaOJ"
+              }
+            },
+            {
+              "artist": "Boards of Canada",
+              "title": "Roygbiv",
+              "album": "Music Has The Right To Children",
+              "duration_seconds": 149,
+              "link": "https://open.spotify.com/track/5Hf2h59YLInKlic7ooWZVd",
+              "service_specific": {
+                "uri": "spotify:track:5Hf2h59YLInKlic7ooWZVd",
+                "track_id": "5Hf2h59YLInKlic7ooWZVd"
+              }
+            },
+            {
+              "artist": "R\u00f6yksopp",
+              "title": "Remind Me - Radio Edit",
+              "album": "Melody AM",
+              "duration_seconds": 219,
+              "link": "https://open.spotify.com/track/1HDMGQX3tx5r08SyewNyXK",
+              "service_specific": {
+                "uri": "spotify:track:1HDMGQX3tx5r08SyewNyXK",
+                "track_id": "1HDMGQX3tx5r08SyewNyXK"
+              }
+            },
+            {
+              "artist": "Justice",
+              "title": "D.A.N.C.E.",
+              "album": "Justice",
+              "duration_seconds": 242,
+              "link": "https://open.spotify.com/track/33yAEqzKXexYM3WlOYtTfQ",
+              "service_specific": {
+                "uri": "spotify:track:33yAEqzKXexYM3WlOYtTfQ",
+                "track_id": "33yAEqzKXexYM3WlOYtTfQ"
+              }
+            },
+            {
+              "artist": "deadmau5",
+              "title": "Strobe",
+              "album": "Strobe",
+              "duration_seconds": 634,
+              "link": "https://open.spotify.com/track/4kJWtxDDNb9oAk3h7sX3N4",
+              "service_specific": {
+                "uri": "spotify:track:4kJWtxDDNb9oAk3h7sX3N4",
+                "track_id": "4kJWtxDDNb9oAk3h7sX3N4"
+              }
+            }
+          ],
+          "cached_at": "2025-12-21T11:52:52.326245+00:00"
+        }
+      },
+      "cached_at": "2025-12-21T11:52:52.326146+00:00"
+    }
+  }
+}

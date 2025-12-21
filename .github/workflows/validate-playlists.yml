@@ -35,7 +35,20 @@ jobs:
           SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
         run: |
           FILES="${{ steps.changed-files.outputs.files }}"
-          uv run python app.py validate config.yaml --files $FILES
+          uv run python app.py validate config.yaml --files $FILES --update-cache
+      
+      - name: Commit cache updates
+        if: success() && steps.changed-files.outputs.count != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .playlist_cache/playlists_cache.json
+          if git diff --staged --quiet; then
+            echo "No cache changes to commit"
+          else
+            git commit -m "chore: update playlist cache [skip ci]"
+            git push
+          fi
       
       - name: Comment PR with results
         if: failure() && steps.changed-files.outputs.count != '0'

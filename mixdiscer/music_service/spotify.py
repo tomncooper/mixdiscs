@@ -28,7 +28,9 @@ class SpotifyMusicService(MusicService):
     """ Class representing a Spotify music service """
 
     def __init__(self):
-        self.auth_manager = SpotifyClientCredentials()
+        # Disable token caching for client credentials flow
+        # (tokens are short-lived and we fetch a new one each session)
+        self.auth_manager = SpotifyClientCredentials(cache_handler=None)
         self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
 
     @property

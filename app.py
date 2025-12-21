@@ -21,7 +21,11 @@ def validate_app(args: Namespace):
 
     playlist_files = [Path(f) for f in args.files]
 
-    results = validate_playlists_from_files(args.config, playlist_files)
+    results = validate_playlists_from_files(
+        args.config,
+        playlist_files,
+        update_cache=args.update_cache
+    )
 
     # Print results
     print(format_validation_results(results))
@@ -35,7 +39,11 @@ def render_app(args: Namespace):
     """ Helper function to render all playlists to HTML """
 
     try:
-        render_all_playlists(args.config, skip_errors=args.skip_errors)
+        render_all_playlists(
+            args.config,
+            skip_errors=args.skip_errors,
+            use_cache=not args.no_cache
+        )
         sys.exit(0)
     except Exception as e:
         logging.error("Rendering failed: %s", e)
@@ -59,6 +67,7 @@ def create_parser():
     validate_parser = subparsers.add_parser("validate", help="Validate specific playlist files")
     validate_parser.add_argument("config", help="Path to the configuration file")
     validate_parser.add_argument("--files", nargs="+", required=True, help="Playlist files to validate")
+    validate_parser.add_argument("--update-cache", action="store_true", help="Update cache for validated playlists")
     validate_parser.set_defaults(func=validate_app)
 
     # Render command
@@ -68,6 +77,11 @@ def create_parser():
         "--skip-errors",
         action="store_true",
         help="Continue rendering even if some playlists fail"
+    )
+    render_parser.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="Bypass cache and reprocess all playlists"
     )
     render_parser.set_defaults(func=render_app)
 

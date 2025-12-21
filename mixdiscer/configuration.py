@@ -9,6 +9,7 @@ MIXDISC_DIRECTORY_CONFIG = "mixdisc_directory"
 PLAYLIST_DURATION_THRESHOLD_CONFIG = "playlist_duration_threshold_mins"
 TEMPLATE_DIR_CONFIG = "template_directory"
 OUTPUT_DIR_CONFIG = "output_directory"
+CACHE_FILE_CONFIG = "cache_file"
 
 
 def load_config(filepath: str):
