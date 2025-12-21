@@ -1,0 +1,8 @@
+user: TestUser
+title: Invalid Format Playlist
+description: This has tracks in wrong format
+genre: Rock
+playlist:
+  - The Beatles Hey Jude
+  - Queen - Bohemian Rhapsody
+  - Led Zeppelin

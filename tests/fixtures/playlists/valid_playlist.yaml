@@ -1,0 +1,10 @@
+user: ValidUser
+title: Valid Test Playlist
+description: This is a valid test playlist under 80 minutes
+genre: Rock
+playlist:
+  - The Beatles - Hey Jude
+  - Queen - Bohemian Rhapsody
+  - Led Zeppelin - Stairway to Heaven
+  - Pink Floyd - Comfortably Numb
+  - The Rolling Stones - Paint It Black

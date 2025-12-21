@@ -1,0 +1,9 @@
+user: TestUser
+title: Missing Tracks Playlist
+description: Contains tracks that don't exist
+genre: Electronic
+playlist:
+  - NonExistent Artist - Fake Song Title XYZABC
+  - Another Fake - Not Real Track 999
+  - The Beatles - Hey Jude
+  - Imaginary Band - Nonexistent Song

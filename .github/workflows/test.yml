@@ -1,0 +1,79 @@
+name: Run Tests
+
+on:
+  pull_request:
+    paths:
+      - 'mixdiscer/**/*.py'
+      - 'app.py'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - '.github/workflows/test.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'mixdiscer/**/*.py'
+      - 'app.py'
+      - 'tests/**'
+      - 'pyproject.toml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      
+      - name: Set up Python
+        run: uv python install 3.13
+      
+      - name: Install dependencies
+        run: |
+          uv sync --group test
+      
+      - name: Run linter (optional - fail on critical issues only)
+        continue-on-error: true
+        run: |
+          uv run pylint mixdiscer/ --fail-under=8.0 --disable=C,R
+      
+      - name: Run type checker (optional)
+        continue-on-error: true
+        run: |
+          uv run mypy mixdiscer/ --ignore-missing-imports
+      
+      - name: Run tests with coverage
+        run: |
+          uv run pytest tests/ -v --cov=mixdiscer --cov-report=term --cov-report=xml --cov-report=html
+        env:
+          # Mock Spotify credentials for tests
+          SPOTIPY_CLIENT_ID: 'test-client-id'
+          SPOTIPY_CLIENT_SECRET: 'test-client-secret'
+      
+      - name: Check test coverage threshold
+        run: |
+          uv run pytest tests/ --cov=mixdiscer --cov-fail-under=65 --cov-report=term
+        env:
+          SPOTIPY_CLIENT_ID: 'test-client-id'
+          SPOTIPY_CLIENT_SECRET: 'test-client-secret'
+      
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            htmlcov/
+      
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: py-cov-action/python-coverage-comment-action@v3
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+        continue-on-error: true

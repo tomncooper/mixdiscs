@@ -1,0 +1,8 @@
+user: TestUser
+title: Album Filter Test
+description: Test playlist with album specifications
+genre: Rock
+playlist:
+  - The Beatles - Hey Jude
+  - Queen - Bohemian Rhapsody | A Night at the Opera
+  - Led Zeppelin - Stairway to Heaven | Led Zeppelin IV

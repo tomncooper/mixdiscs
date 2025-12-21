@@ -1,0 +1,20 @@
+user: TestUser
+title: Over Duration Playlist
+description: This playlist exceeds the 80-minute threshold
+genre: Progressive Rock
+playlist:
+  - Genesis - Supper's Ready
+  - Yes - Close to the Edge
+  - Emerson Lake & Palmer - Tarkus
+  - King Crimson - Lizard
+  - Jethro Tull - Thick as a Brick
+  - Pink Floyd - Echoes
+  - Rush - 2112
+  - Dream Theater - A Change of Seasons
+  - Tool - Lateralus
+  - Opeth - Black Rose Immortal
+  - Porcupine Tree - Anesthetize
+  - Symphony X - The Odyssey
+  - Transatlantic - The Whirlwind
+  - The Mars Volta - Cassandra Gemini
+  - Between the Buried and Me - Swim to the Moon

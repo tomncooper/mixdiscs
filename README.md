@@ -113,3 +113,70 @@ This script:
 1. Finds all modified/added playlist files compared to main
 2. Validates them using the validate command
 3. Requires Spotify credentials to be exported
+
+## Testing
+
+This project has comprehensive unit tests to ensure reliability and maintainability.
+
+### Running Tests
+
+```bash
+# Run all tests
+uv run pytest
+
+# Run with coverage report
+uv run pytest --cov=mixdiscer --cov-report=html
+
+# Run specific test file
+uv run pytest tests/unit/test_playlists.py
+
+# Run tests matching a pattern
+uv run pytest -k "test_validate"
+
+# Run with verbose output
+uv run pytest -v
+
+# Run without capturing output (useful for debugging)
+uv run pytest -s
+```
+
+### Test Structure
+
+```
+tests/
+├── unit/                    # Unit tests for individual modules
+│   ├── test_configuration.py
+│   ├── test_playlists.py
+│   ├── test_validation.py
+│   ├── test_cache.py
+│   ├── test_track_cache.py
+│   ├── test_main.py
+│   └── music_service/
+│       └── test_music_service.py
+├── integration/             # Integration tests (future)
+├── fixtures/                # Test data files
+│   ├── playlists/
+│   └── configs/
+└── conftest.py             # Shared test fixtures
+```
+
+### Coverage Goals
+
+- **Overall:** ≥65%
+- **Critical modules:** ≥90%
+  - `playlists.py` - 91%
+  - `validation.py` - 95%
+  - `cache.py` - 95%
+  - `track_cache.py` - 89%
+
+### Continuous Integration
+
+Tests automatically run on every pull request that modifies code. The GitHub Actions workflow:
+1. Installs dependencies
+2. Runs linter (optional)
+3. Runs type checker (optional)
+4. Executes all tests with coverage
+5. Fails if coverage drops below 65%
+6. Uploads coverage reports as artifacts
+
+See `.github/workflows/test.yml` for details.
