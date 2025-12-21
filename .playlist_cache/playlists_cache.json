@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2025-12-21T11:52:52.326309+00:00",
+  "last_updated": "2025-12-21T17:48:54.373079+00:00",
   "playlists": {
     "MixMasterTest/Testy McTest List": {
       "user": "MixMasterTest",
@@ -133,10 +133,10 @@
               }
             }
           ],
-          "cached_at": "2025-12-21T11:51:49.350219+00:00"
+          "cached_at": "2025-12-21T17:47:13.920573+00:00"
         }
       },
-      "cached_at": "2025-12-21T11:47:50.551064+00:00"
+      "cached_at": "2025-12-21T17:47:13.920354+00:00"
     },
     "ElectroCurator/Late Night Circuits": {
       "user": "ElectroCurator",
@@ -291,10 +291,68 @@
               }
             }
           ],
-          "cached_at": "2025-12-21T11:52:52.326245+00:00"
+          "cached_at": "2025-12-21T17:47:17.504877+00:00"
         }
       },
-      "cached_at": "2025-12-21T11:52:52.326146+00:00"
+      "cached_at": "2025-12-21T17:47:17.504670+00:00"
+    },
+    "TestUser/Album Test": {
+      "user": "TestUser",
+      "title": "Album Test",
+      "filepath": "mixdiscs/TestUser/TestUser - Album Test.yaml",
+      "content_hash": "1120f3f70dbcaf6dd4689792cda3d8de2d5e391ab4f5a1939575a8754d06dff6",
+      "music_services": {
+        "spotify": {
+          "total_duration_seconds": 1721,
+          "tracks": [
+            {
+              "artist": "Queen",
+              "title": "Bohemian Rhapsody",
+              "album": "Bohemian Rhapsody (The Original Soundtrack)",
+              "duration_seconds": 354,
+              "link": "https://open.spotify.com/track/3z8h0TU7ReDPLIbEnYhWZb"
+            },
+            {
+              "artist": "Queen",
+              "title": "Bohemian Rhapsody - Remastered 2011",
+              "album": "A Night At The Opera (2011 Remaster)",
+              "duration_seconds": 354,
+              "link": "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+              "service_specific": {
+                "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
+                "track_id": "4u7EnebtmKWzUH433cf5Qv"
+              }
+            },
+            {
+              "artist": "Pink Floyd",
+              "title": "Comfortably Numb",
+              "album": "The Wall",
+              "duration_seconds": 382,
+              "link": "https://open.spotify.com/track/5HNCy40Ni5BZJFw1TKzRsC"
+            },
+            {
+              "artist": "David Bowie",
+              "title": "Heroes",
+              "album": "\"Heroes\" (2017 Remaster)",
+              "duration_seconds": 371,
+              "link": "https://open.spotify.com/track/7Jh1bpe76CNTCgdgAdBw4Z"
+            },
+            {
+              "artist": "The Beatles",
+              "title": "Come Together - Remastered 2009",
+              "album": "Abbey Road (Remastered)",
+              "duration_seconds": 259,
+              "link": "https://open.spotify.com/track/2EqlS6tkEnglzr7tkKAAYD",
+              "service_specific": {
+                "uri": "spotify:track:2EqlS6tkEnglzr7tkKAAYD",
+                "track_id": "2EqlS6tkEnglzr7tkKAAYD"
+              }
+            }
+          ],
+          "cached_at": "2025-12-21T17:48:54.372980+00:00"
+        }
+      },
+      "cached_at": "2025-12-21T17:48:19.968565+00:00"
     }
   }
 }

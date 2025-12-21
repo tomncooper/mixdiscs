@@ -77,7 +77,7 @@ class MusicService(ABC):
         This name is ued to identify the service in logs and output """
 
     @abstractmethod
-    def find_track(self, artist: str, track: str) -> Optional[Track]:
+    def find_track(self, artist: str, track: str, album: Optional[str] = None) -> Optional[Track]:
         """ Returns a Track object for the given artist and track.
         If the track is not found because it is not present on the music
         service then this method should return None. If there is any
@@ -87,6 +87,9 @@ class MusicService(ABC):
         Arguments:
             artist: The name of the performing artist
             track: The title of the track
+            album: Optional album name to find a specific version of the track.
+                   If not provided, the service should return the first/default match.
+                   If provided but not found, the service should fall back to default.
 
         Returns:
             A Track object representing the track or None if the track

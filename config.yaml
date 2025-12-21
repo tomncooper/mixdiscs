@@ -3,3 +3,4 @@ playlist_duration_threshold_mins: 80
 template_directory: templates
 output_directory: site_files
 cache_file: .playlist_cache/playlists_cache.json
+track_cache_file: .playlist_cache/tracks_cache.json

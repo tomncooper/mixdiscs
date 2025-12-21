@@ -1,0 +1,777 @@
+{
+  "version": "2.0",
+  "last_updated": "2025-12-21T17:50:02.020212+00:00",
+  "tracks": {
+    "michael jackson - thriller": {
+      "query": {
+        "artist": "Michael Jackson",
+        "title": "Thriller"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Michael Jackson",
+            "title": "Thriller",
+            "album": "Thriller 25 Super Deluxe Edition",
+            "normalized_album": "thriller 25 super deluxe edition",
+            "duration_seconds": 357,
+            "link": "https://open.spotify.com/track/3S2R0EVwBSAVMd5UMgKTL0",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:10.954752+00:00",
+            "service_specific": {
+              "uri": "spotify:track:3S2R0EVwBSAVMd5UMgKTL0",
+              "track_id": "3S2R0EVwBSAVMd5UMgKTL0"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:10.954725+00:00",
+      "last_accessed": "2025-12-21T17:47:58.941952+00:00",
+      "access_count": 3
+    },
+    "the rolling stones - gimme shelter": {
+      "query": {
+        "artist": "The Rolling Stones",
+        "title": "Gimme Shelter"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Rolling Stones",
+            "title": "Gimme Shelter",
+            "album": "Let It Bleed",
+            "normalized_album": "let it bleed",
+            "duration_seconds": 270,
+            "link": "https://open.spotify.com/track/6H3kDe7CGoWYBabAeVWGiD",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:11.240751+00:00",
+            "service_specific": {
+              "uri": "spotify:track:6H3kDe7CGoWYBabAeVWGiD",
+              "track_id": "6H3kDe7CGoWYBabAeVWGiD"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:11.240716+00:00",
+      "last_accessed": "2025-12-21T17:47:58.941980+00:00",
+      "access_count": 3
+    },
+    "the who - won't get fooled again": {
+      "query": {
+        "artist": "The Who",
+        "title": "Won't Get Fooled Again"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Who",
+            "title": "Won't Get Fooled Again - Original Album Version",
+            "album": "Who's Next (Deluxe Edition)",
+            "normalized_album": "who's next (deluxe edition)",
+            "duration_seconds": 511,
+            "link": "https://open.spotify.com/track/0cJPLFrlV7TTCyPLupHzcH",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:11.566324+00:00",
+            "service_specific": {
+              "uri": "spotify:track:0cJPLFrlV7TTCyPLupHzcH",
+              "track_id": "0cJPLFrlV7TTCyPLupHzcH"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:11.566263+00:00",
+      "last_accessed": "2025-12-21T17:47:58.941991+00:00",
+      "access_count": 3
+    },
+    "led zeppelin - immigrant song": {
+      "query": {
+        "artist": "Led Zeppelin",
+        "title": "Immigrant Song"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Led Zeppelin",
+            "title": "Immigrant Song - Remaster",
+            "album": "Led Zeppelin III (Remaster)",
+            "normalized_album": "led zeppelin iii (remaster)",
+            "duration_seconds": 146,
+            "link": "https://open.spotify.com/track/78lgmZwycJ3nzsdgmPPGNx",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:11.766594+00:00",
+            "service_specific": {
+              "uri": "spotify:track:78lgmZwycJ3nzsdgmPPGNx",
+              "track_id": "78lgmZwycJ3nzsdgmPPGNx"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:11.766573+00:00",
+      "last_accessed": "2025-12-21T17:47:58.941998+00:00",
+      "access_count": 3
+    },
+    "pink floyd - wish you were here": {
+      "query": {
+        "artist": "Pink Floyd",
+        "title": "Wish You Were Here"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Pink Floyd",
+            "title": "Wish You Were Here",
+            "album": "Wish You Were Here",
+            "normalized_album": "wish you were here",
+            "duration_seconds": 338,
+            "link": "https://open.spotify.com/track/6mFkJmJqdDVQ1REhVfGgd1",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:12.081136+00:00",
+            "service_specific": {
+              "uri": "spotify:track:6mFkJmJqdDVQ1REhVfGgd1",
+              "track_id": "6mFkJmJqdDVQ1REhVfGgd1"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:12.081082+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942003+00:00",
+      "access_count": 3
+    },
+    "the doors - riders on the storm": {
+      "query": {
+        "artist": "The Doors",
+        "title": "Riders on the Storm"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Doors",
+            "title": "Riders on the Storm",
+            "album": "L.A. Woman",
+            "normalized_album": "l.a. woman",
+            "duration_seconds": 434,
+            "link": "https://open.spotify.com/track/14XWXWv5FoCbFzLksawpEe",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:12.384878+00:00",
+            "service_specific": {
+              "uri": "spotify:track:14XWXWv5FoCbFzLksawpEe",
+              "track_id": "14XWXWv5FoCbFzLksawpEe"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:12.384814+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942007+00:00",
+      "access_count": 3
+    },
+    "the eagles - hotel california": {
+      "query": {
+        "artist": "The Eagles",
+        "title": "Hotel California"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Eagles",
+            "title": "Hotel California - Live On MTV, 1994",
+            "album": "Hell Freezes Over (Remaster 2018)",
+            "normalized_album": "hell freezes over (remaster 2018)",
+            "duration_seconds": 432,
+            "link": "https://open.spotify.com/track/2GpBrAoCwt48fxjgjlzMd4",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:12.732583+00:00",
+            "service_specific": {
+              "uri": "spotify:track:2GpBrAoCwt48fxjgjlzMd4",
+              "track_id": "2GpBrAoCwt48fxjgjlzMd4"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:12.732540+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942011+00:00",
+      "access_count": 3
+    },
+    "fleetwood mac - go your own way": {
+      "query": {
+        "artist": "Fleetwood Mac",
+        "title": "Go Your Own Way"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Fleetwood Mac",
+            "title": "Go Your Own Way - 2004 Remaster",
+            "album": "Rumours",
+            "normalized_album": "rumours",
+            "duration_seconds": 223,
+            "link": "https://open.spotify.com/track/07GvNcU1WdyZJq3XxP0kZa",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:13.000078+00:00",
+            "service_specific": {
+              "uri": "spotify:track:07GvNcU1WdyZJq3XxP0kZa",
+              "track_id": "07GvNcU1WdyZJq3XxP0kZa"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:13.000017+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942015+00:00",
+      "access_count": 3
+    },
+    "queen - bohemian rhapsody": {
+      "query": {
+        "artist": "Queen",
+        "title": "Bohemian Rhapsody"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Queen",
+            "title": "Bohemian Rhapsody",
+            "album": "Bohemian Rhapsody (The Original Soundtrack)",
+            "normalized_album": "bohemian rhapsody (the original soundtrack)",
+            "duration_seconds": 354,
+            "link": "https://open.spotify.com/track/3z8h0TU7ReDPLIbEnYhWZb",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:13.304112+00:00",
+            "service_specific": {
+              "uri": "spotify:track:3z8h0TU7ReDPLIbEnYhWZb",
+              "track_id": "3z8h0TU7ReDPLIbEnYhWZb"
+            }
+          },
+          {
+            "found": true,
+            "artist": "Queen",
+            "title": "Bohemian Rhapsody - Remastered 2011",
+            "album": "A Night At The Opera (2011 Remaster)",
+            "normalized_album": "a night at the opera (2011 remaster)",
+            "duration_seconds": 354,
+            "link": "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+            "is_default": false,
+            "cached_at": "2025-12-21T17:48:53.971122+00:00",
+            "service_specific": {
+              "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
+              "track_id": "4u7EnebtmKWzUH433cf5Qv"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:13.304085+00:00",
+      "last_accessed": "2025-12-21T17:48:53.971072+00:00",
+      "access_count": 9
+    },
+    "david bowie - ziggy stardust": {
+      "query": {
+        "artist": "David Bowie",
+        "title": "Ziggy Stardust"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "David Bowie",
+            "title": "Ziggy Stardust - 2012 Remaster",
+            "album": "The Rise and Fall of Ziggy Stardust and the Spiders from Mars (2012 Remaster)",
+            "normalized_album": "the rise and fall of ziggy stardust and the spiders from mars (2012 remaster)",
+            "duration_seconds": 193,
+            "link": "https://open.spotify.com/track/5IyL3XOaRPpTgxVjRIAxXU",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:13.611026+00:00",
+            "service_specific": {
+              "uri": "spotify:track:5IyL3XOaRPpTgxVjRIAxXU",
+              "track_id": "5IyL3XOaRPpTgxVjRIAxXU"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:13.611001+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942022+00:00",
+      "access_count": 3
+    },
+    "the clash - london calling": {
+      "query": {
+        "artist": "The Clash",
+        "title": "London Calling"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Clash",
+            "title": "London Calling",
+            "album": "London Calling (Expanded Edition)",
+            "normalized_album": "london calling (expanded edition)",
+            "duration_seconds": 199,
+            "link": "https://open.spotify.com/track/124Y9LPRCAz3q2OP0iCvcJ",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:13.919860+00:00",
+            "service_specific": {
+              "uri": "spotify:track:124Y9LPRCAz3q2OP0iCvcJ",
+              "track_id": "124Y9LPRCAz3q2OP0iCvcJ"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:13.919796+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942026+00:00",
+      "access_count": 3
+    },
+    "daft punk - one more time": {
+      "query": {
+        "artist": "Daft Punk",
+        "title": "One More Time"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Daft Punk",
+            "title": "One More Time",
+            "album": "Discovery",
+            "normalized_album": "discovery",
+            "duration_seconds": 320,
+            "link": "https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:14.224490+00:00",
+            "service_specific": {
+              "uri": "spotify:track:0DiWol3AO6WpXZgp0goxAV",
+              "track_id": "0DiWol3AO6WpXZgp0goxAV"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:14.224463+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942166+00:00",
+      "access_count": 3
+    },
+    "the chemical brothers - block rockin' beats": {
+      "query": {
+        "artist": "The Chemical Brothers",
+        "title": "Block Rockin' Beats"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Chemical Brothers",
+            "title": "Block Rockin' Beats",
+            "album": "Dig Your Own Hole",
+            "normalized_album": "dig your own hole",
+            "duration_seconds": 313,
+            "link": "https://open.spotify.com/track/1FNvrp5K02oThumS6gllzp",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:14.534785+00:00",
+            "service_specific": {
+              "uri": "spotify:track:1FNvrp5K02oThumS6gllzp",
+              "track_id": "1FNvrp5K02oThumS6gllzp"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:14.534757+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942177+00:00",
+      "access_count": 3
+    },
+    "aphex twin - windowlicker": {
+      "query": {
+        "artist": "Aphex Twin",
+        "title": "Windowlicker"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Aphex Twin",
+            "title": "Windowlicker",
+            "album": "Windowlicker",
+            "normalized_album": "windowlicker",
+            "duration_seconds": 365,
+            "link": "https://open.spotify.com/track/409z4jUHpq7eIkg3N3FzZh",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:14.713011+00:00",
+            "service_specific": {
+              "uri": "spotify:track:409z4jUHpq7eIkg3N3FzZh",
+              "track_id": "409z4jUHpq7eIkg3N3FzZh"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:14.712958+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942182+00:00",
+      "access_count": 3
+    },
+    "moby - porcelain": {
+      "query": {
+        "artist": "Moby",
+        "title": "Porcelain"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Moby",
+            "title": "Porcelain",
+            "album": "Play",
+            "normalized_album": "play",
+            "duration_seconds": 241,
+            "link": "https://open.spotify.com/track/6EXi6ZqTITKGtVBKqbphjL",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:15.252660+00:00",
+            "service_specific": {
+              "uri": "spotify:track:6EXi6ZqTITKGtVBKqbphjL",
+              "track_id": "6EXi6ZqTITKGtVBKqbphjL"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:15.252550+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942186+00:00",
+      "access_count": 3
+    },
+    "fatboy slim - right here, right now": {
+      "query": {
+        "artist": "Fatboy Slim",
+        "title": "Right Here, Right Now"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Fatboy Slim",
+            "title": "Right Here, Right Now",
+            "album": "You've Come a Long Way Baby",
+            "normalized_album": "you've come a long way baby",
+            "duration_seconds": 387,
+            "link": "https://open.spotify.com/track/5Sh9v7RwibuV34tdjscwx5",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:15.562078+00:00",
+            "service_specific": {
+              "uri": "spotify:track:5Sh9v7RwibuV34tdjscwx5",
+              "track_id": "5Sh9v7RwibuV34tdjscwx5"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:15.562016+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942190+00:00",
+      "access_count": 3
+    },
+    "underworld - born slippy": {
+      "query": {
+        "artist": "Underworld",
+        "title": "Born Slippy"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Underworld",
+            "title": "Born Slippy (Nuxx)",
+            "album": "1992 - 2012",
+            "normalized_album": "1992 - 2012",
+            "duration_seconds": 456,
+            "link": "https://open.spotify.com/track/7xQYVjs4wZNdCwO0EeAWMC",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:15.788134+00:00",
+            "service_specific": {
+              "uri": "spotify:track:7xQYVjs4wZNdCwO0EeAWMC",
+              "track_id": "7xQYVjs4wZNdCwO0EeAWMC"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:15.788115+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942194+00:00",
+      "access_count": 3
+    },
+    "the prodigy - breathe": {
+      "query": {
+        "artist": "The Prodigy",
+        "title": "Breathe"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Prodigy",
+            "title": "Breathe",
+            "album": "The Fat of the Land",
+            "normalized_album": "the fat of the land",
+            "duration_seconds": 336,
+            "link": "https://open.spotify.com/track/0Ja4hLKiUSw01E01pJ1yGr",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:16.178480+00:00",
+            "service_specific": {
+              "uri": "spotify:track:0Ja4hLKiUSw01E01pJ1yGr",
+              "track_id": "0Ja4hLKiUSw01E01pJ1yGr"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:16.178455+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942198+00:00",
+      "access_count": 3
+    },
+    "orbital - halcyon on and on": {
+      "query": {
+        "artist": "Orbital",
+        "title": "Halcyon On and On"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Orbital",
+            "title": "Halcyon & On - Jon Hopkins Remix",
+            "album": "30 Something",
+            "normalized_album": "30 something",
+            "duration_seconds": 431,
+            "link": "https://open.spotify.com/track/3dsnJC7f8lA4NxXsb8LMOr",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:16.322057+00:00",
+            "service_specific": {
+              "uri": "spotify:track:3dsnJC7f8lA4NxXsb8LMOr",
+              "track_id": "3dsnJC7f8lA4NxXsb8LMOr"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:16.322006+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942202+00:00",
+      "access_count": 3
+    },
+    "massive attack - teardrop": {
+      "query": {
+        "artist": "Massive Attack",
+        "title": "Teardrop"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Massive Attack",
+            "title": "Teardrop",
+            "album": "Mezzanine",
+            "normalized_album": "mezzanine",
+            "duration_seconds": 330,
+            "link": "https://open.spotify.com/track/67Hna13dNDkZvBpTXRIaOJ",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:16.580119+00:00",
+            "service_specific": {
+              "uri": "spotify:track:67Hna13dNDkZvBpTXRIaOJ",
+              "track_id": "67Hna13dNDkZvBpTXRIaOJ"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:16.580098+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942205+00:00",
+      "access_count": 3
+    },
+    "boards of canada - roygbiv": {
+      "query": {
+        "artist": "Boards of Canada",
+        "title": "Roygbiv"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Boards of Canada",
+            "title": "Roygbiv",
+            "album": "Music Has The Right To Children",
+            "normalized_album": "music has the right to children",
+            "duration_seconds": 149,
+            "link": "https://open.spotify.com/track/5Hf2h59YLInKlic7ooWZVd",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:16.813176+00:00",
+            "service_specific": {
+              "uri": "spotify:track:5Hf2h59YLInKlic7ooWZVd",
+              "track_id": "5Hf2h59YLInKlic7ooWZVd"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:16.813116+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942209+00:00",
+      "access_count": 3
+    },
+    "r\u00f6yksopp - remind me": {
+      "query": {
+        "artist": "R\u00f6yksopp",
+        "title": "Remind Me"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "R\u00f6yksopp",
+            "title": "Remind Me - Radio Edit",
+            "album": "Melody AM",
+            "normalized_album": "melody am",
+            "duration_seconds": 219,
+            "link": "https://open.spotify.com/track/1HDMGQX3tx5r08SyewNyXK",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:17.094045+00:00",
+            "service_specific": {
+              "uri": "spotify:track:1HDMGQX3tx5r08SyewNyXK",
+              "track_id": "1HDMGQX3tx5r08SyewNyXK"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:17.093981+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942214+00:00",
+      "access_count": 3
+    },
+    "justice - d.a.n.c.e.": {
+      "query": {
+        "artist": "Justice",
+        "title": "D.A.N.C.E."
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Justice",
+            "title": "D.A.N.C.E.",
+            "album": "Justice",
+            "normalized_album": "justice",
+            "duration_seconds": 242,
+            "link": "https://open.spotify.com/track/33yAEqzKXexYM3WlOYtTfQ",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:17.295229+00:00",
+            "service_specific": {
+              "uri": "spotify:track:33yAEqzKXexYM3WlOYtTfQ",
+              "track_id": "33yAEqzKXexYM3WlOYtTfQ"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:17.295201+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942218+00:00",
+      "access_count": 3
+    },
+    "deadmau5 - strobe": {
+      "query": {
+        "artist": "Deadmau5",
+        "title": "Strobe"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "deadmau5",
+            "title": "Strobe",
+            "album": "Strobe",
+            "normalized_album": "strobe",
+            "duration_seconds": 634,
+            "link": "https://open.spotify.com/track/4kJWtxDDNb9oAk3h7sX3N4",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:47:17.504180+00:00",
+            "service_specific": {
+              "uri": "spotify:track:4kJWtxDDNb9oAk3h7sX3N4",
+              "track_id": "4kJWtxDDNb9oAk3h7sX3N4"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:47:17.504119+00:00",
+      "last_accessed": "2025-12-21T17:47:58.942221+00:00",
+      "access_count": 3
+    },
+    "pink floyd - comfortably numb": {
+      "query": {
+        "artist": "Pink Floyd",
+        "title": "Comfortably Numb"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "Pink Floyd",
+            "title": "Comfortably Numb",
+            "album": "The Wall",
+            "normalized_album": "the wall",
+            "duration_seconds": 382,
+            "link": "https://open.spotify.com/track/5HNCy40Ni5BZJFw1TKzRsC",
+            "is_default": false,
+            "cached_at": "2025-12-21T17:48:19.657702+00:00",
+            "service_specific": {
+              "uri": "spotify:track:5HNCy40Ni5BZJFw1TKzRsC",
+              "track_id": "5HNCy40Ni5BZJFw1TKzRsC"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:48:19.657673+00:00",
+      "last_accessed": "2025-12-21T17:48:53.971177+00:00",
+      "access_count": 3
+    },
+    "david bowie - heroes": {
+      "query": {
+        "artist": "David Bowie",
+        "title": "Heroes"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "David Bowie",
+            "title": "\"Heroes\" - 2017 Remaster",
+            "album": "\"Heroes\" (2017 Remaster)",
+            "normalized_album": "\"heroes\" (2017 remaster)",
+            "duration_seconds": 371,
+            "link": "https://open.spotify.com/track/7Jh1bpe76CNTCgdgAdBw4Z",
+            "is_default": true,
+            "cached_at": "2025-12-21T17:48:19.967704+00:00",
+            "service_specific": {
+              "uri": "spotify:track:7Jh1bpe76CNTCgdgAdBw4Z",
+              "track_id": "7Jh1bpe76CNTCgdgAdBw4Z"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:48:19.967641+00:00",
+      "last_accessed": "2025-12-21T17:48:53.971227+00:00",
+      "access_count": 3
+    },
+    "the beatles - come together": {
+      "query": {
+        "artist": "The Beatles",
+        "title": "Come Together"
+      },
+      "versions": {
+        "spotify": [
+          {
+            "found": true,
+            "artist": "The Beatles",
+            "title": "Come Together - Remastered 2009",
+            "album": "Abbey Road (Remastered)",
+            "normalized_album": "abbey road (remastered)",
+            "duration_seconds": 259,
+            "link": "https://open.spotify.com/track/2EqlS6tkEnglzr7tkKAAYD",
+            "is_default": false,
+            "cached_at": "2025-12-21T17:48:54.372317+00:00",
+            "service_specific": {
+              "uri": "spotify:track:2EqlS6tkEnglzr7tkKAAYD",
+              "track_id": "2EqlS6tkEnglzr7tkKAAYD"
+            }
+          }
+        ]
+      },
+      "first_seen": "2025-12-21T17:48:54.372254+00:00",
+      "last_accessed": "2025-12-21T17:48:54.372292+00:00",
+      "access_count": 2
+    }
+  }
+}

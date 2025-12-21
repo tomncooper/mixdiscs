@@ -46,7 +46,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No cache changes to commit"
           else
-            git commit -m "chore: update playlist cache [skip ci]"
+            git commit -m "CI: update playlist cache [skip ci]"
             git push
           fi
       

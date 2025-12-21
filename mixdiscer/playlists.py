@@ -23,7 +23,7 @@ class Playlist:
     title: str
     description: str
     genre: str
-    tracks: List[Tuple[str, str]]
+    tracks: List[Tuple[str, str, Optional[str]]]  # (artist, title, album)
     filepath: Optional[Path] = None
 
 
@@ -226,25 +226,61 @@ def load_playlist(filepath: Path, base_directory: Optional[Path] = None) -> Play
         title=data['title'].strip(),
         description=data['description'].strip(),
         genre=data['genre'].strip(),
-        tracks=[get_artist_album_from_entry(entry) for entry in data['playlist']],
+        tracks=[get_artist_title_album_from_entry(entry) for entry in data['playlist']],
         filepath=filepath
     )
 
 
-def get_artist_album_from_entry(entry: str) -> tuple[str, str]:
-    """ Extract the artist and album from a playlist entry """
+def get_artist_title_album_from_entry(entry: str) -> tuple[str, str, Optional[str]]:
+    """ 
+    Extract artist, title, and optional album from a playlist entry.
+    
+    Supports two formats:
+    - "Artist - Title" (album is None)
+    - "Artist - Title | Album" (album is specified)
+    
+    Args:
+        entry: Playlist entry string
+        
+    Returns:
+        Tuple of (artist, title, album)
+        
+    Raises:
+        PlaylistValidationError: If format is invalid
+    """
     if not entry or not entry.strip():
         raise PlaylistValidationError("Playlist entry cannot be blank")
     
-    if ' - ' not in entry:
-        raise PlaylistValidationError(f"Invalid playlist entry format: '{entry}'. Expected 'Artist - Song Title'")
+    # Check for album specification (pipe separator)
+    if ' | ' in entry:
+        track_part, album = entry.split(' | ', 1)
+        album = album.strip()
+        if not album:
+            raise PlaylistValidationError(
+                f"Album cannot be blank in entry: '{entry}'"
+            )
+    elif '|' in entry:
+        # Pipe without proper spacing - this is likely a mistake
+        raise PlaylistValidationError(
+            f"Invalid format: '{entry}'. Use ' | ' (with spaces) to separate album"
+        )
+    else:
+        track_part = entry
+        album = None
     
-    artist, album = entry.split(' - ', 1)  # Split only on first ' - ' occurrence
+    # Parse artist and title
+    if ' - ' not in track_part:
+        raise PlaylistValidationError(
+            f"Invalid playlist entry format: '{entry}'. "
+            f"Expected 'Artist - Title' or 'Artist - Title | Album'"
+        )
+    
+    artist, title = track_part.split(' - ', 1)  # Split only on first ' - ' occurrence
     
     if not artist.strip():
         raise PlaylistValidationError(f"Artist name cannot be blank in entry: '{entry}'")
     
-    if not album.strip():
+    if not title.strip():
         raise PlaylistValidationError(f"Song title cannot be blank in entry: '{entry}'")
     
-    return artist.strip(), album.strip()
+    return artist.strip(), title.strip(), album
