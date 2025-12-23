@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse by Genre - Mixdiscs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MIXDISCS</h1>
+            <h2 class="subtitle">Playlists...but nerdier</h2>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">← Back to Home</a>
+                <a href="users.html" class="nav-link">Browse by User</a>
+            </div>
+        </header>
+        
+        <div class="filter-section">
+            <h3>Browse by Genre</h3>
+            <div class="filter-links">
+                {% for genre, count in genres %}
+                <a href="genre-{{ genre }}.html" class="filter-link">{{ genre }} ({{ count }})</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

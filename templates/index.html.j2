@@ -3,89 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mixdiscer - Processed Playlists</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .playlist {
-            background-color: white;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .playlist-header {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-        }
-        .playlist-title {
-            font-size: 1.5em;
-            margin: 0;
-        }
-        .playlist-meta {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .duration {
-            font-family: monospace;
-        }
-        .link {
-            color: #1db954;
-            text-decoration: none;
-        }
-        .link:hover {
-            text-decoration: underline;
-        }
-        .no-link {
-            color: #999;
-            font-style: italic;
-        }
-        .service-header {
-            background-color: #1db954;
-            color: white;
-            padding: 10px 15px;
-            font-weight: bold;
-            text-transform: capitalize;
-        }
-    </style>
+    <title>Mixdiscs - Playlists...but nerdier</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Mixdiscs</h1>
-    <h2>Playlists...but nerdier</h2>
+    <div class="container">
+        <header>
+            <h1>MIXDISCS</h1>
+            <h2 class="subtitle">Playlists...but nerdier</h2>
+            {% if show_all_link %}
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">← Back to Recent</a>
+            </div>
+            {% else %}
+            <div class="nav-links">
+                <a href="all-playlists.html" class="nav-link">View All Playlists →</a>
+                <a href="users.html" class="nav-link">Browse by User</a>
+                <a href="genres.html" class="nav-link">Browse by Genre</a>
+            </div>
+            {% endif %}
+        </header>
+    
+    {% if page_title %}
+        <h2 style="color: var(--cyan); margin: 20px 0;">{{ page_title }}</h2>
+    {% endif %}
     
     {% if processed_playlists %}
         {% for processed_playlist in processed_playlists %}
             <div class="playlist">
-                <div class="playlist-header">
-                    <h2 class="playlist-title">{{ processed_playlist.user_playlist.title }}</h2>
-                    <div class="playlist-meta">
-                        by {{ processed_playlist.user_playlist.user }} | 
-                        Genre: {{ processed_playlist.user_playlist.genre }} | 
-                        {{ processed_playlist.user_playlist.description }}
+                <div class="playlist-header collapsed">
+                    <div class="playlist-header-content">
+                        <div>
+                            <h2 class="playlist-title">{{ processed_playlist.user_playlist.title }}</h2>
+                            <div class="playlist-meta">
+                                by <a href="user-{{ processed_playlist.user_playlist.user }}.html">{{ processed_playlist.user_playlist.user }}</a> | 
+                                Genre: <a href="genre-{{ processed_playlist.user_playlist.genre }}.html">{{ processed_playlist.user_playlist.genre }}</a>
+                            </div>
+                            <div class="playlist-meta">
+                                {{ processed_playlist.user_playlist.description }}
+                            </div>
+                        </div>
+                        <div class="collapse-icon">▼</div>
                     </div>
                 </div>
                 
+                <div class="playlist-content collapsed">
                 {% for music_service_playlist in processed_playlist.music_service_playlists %}
                     <div class="service-header">
                         Music Service Playlist (Total Duration: {{ music_service_playlist.total_duration | duration_format }})
@@ -124,10 +86,33 @@
                         </tbody>
                     </table>
                 {% endfor %}
+                </div>
             </div>
         {% endfor %}
+        
+        {% if pagination %}
+        <div class="pagination">
+            {% if pagination.prev_page %}
+                <a href="{{ pagination.prev_page }}">← Previous</a>
+            {% endif %}
+            
+            {% for page_num in pagination.pages %}
+                {% if page_num == pagination.current_page %}
+                    <span class="current">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ pagination.page_links[page_num] }}">{{ page_num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if pagination.next_page %}
+                <a href="{{ pagination.next_page }}">Next →</a>
+            {% endif %}
+        </div>
+        {% endif %}
     {% else %}
         <p>No processed playlists found.</p>
     {% endif %}
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
