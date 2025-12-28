@@ -4,4 +4,5 @@ from .music_service import (
     MusicServicePlaylist,
     ProcessedPlaylist,
     MusicServiceError,
+    ValidationWarning,
 )

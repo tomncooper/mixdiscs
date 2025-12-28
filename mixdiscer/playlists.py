@@ -23,8 +23,10 @@ class Playlist:
     title: str
     description: str
     genre: str
-    tracks: List[Tuple[str, str, Optional[str]]]  # (artist, title, album)
+    tracks: Optional[List[Tuple[str, str, Optional[str]]]]  # (artist, title, album) - None if remote
     filepath: Optional[Path] = None
+    remote_playlist: Optional[str] = None  # Spotify URL/URI if remote playlist
+    remote_service: str = "spotify"  # Service identifier for remote playlists
 
 
 def validate_username_format(username: str) -> None:
@@ -191,10 +193,25 @@ def load_playlist(filepath: Path, base_directory: Optional[Path] = None) -> Play
         data = yaml.load(playlist_file, Loader=yaml.FullLoader)
 
     # Validate required fields exist
-    required_fields = ['user', 'title', 'description', 'genre', 'playlist']
+    required_fields = ['user', 'title', 'description', 'genre']
     for field in required_fields:
         if field not in data:
             raise PlaylistValidationError(f"Missing required field: {field}")
+    
+    # Check for playlist format (manual vs remote)
+    has_tracks = 'playlist' in data and data['playlist']
+    has_remote = 'remote_playlist' in data and data['remote_playlist']
+    
+    # Validate mutual exclusivity
+    if has_tracks and has_remote:
+        raise PlaylistValidationError(
+            "Cannot specify both 'playlist' and 'remote_playlist' fields"
+        )
+    
+    if not has_tracks and not has_remote:
+        raise PlaylistValidationError(
+            "Must specify either 'playlist' or 'remote_playlist' field"
+        )
     
     # Validate fields are not blank
     if not data['user'] or not str(data['user']).strip():
@@ -208,9 +225,6 @@ def load_playlist(filepath: Path, base_directory: Optional[Path] = None) -> Play
     
     if not data['genre'] or not str(data['genre']).strip():
         raise PlaylistValidationError("Field 'genre' cannot be blank")
-    
-    if not data['playlist'] or len(data['playlist']) == 0:
-        raise PlaylistValidationError("Field 'playlist' cannot be blank or empty")
 
     user = data['user'].strip()
     
@@ -220,6 +234,32 @@ def load_playlist(filepath: Path, base_directory: Optional[Path] = None) -> Play
     # Validate folder structure if base_directory is provided
     if base_directory is not None:
         validate_username_matches_folder(filepath, user, base_directory)
+    
+    # Handle remote playlist
+    if has_remote:
+        remote_url = data['remote_playlist'].strip()
+        
+        # Validate URL format (basic check)
+        if not ('open.spotify.com/playlist/' in remote_url or 'spotify:playlist:' in remote_url):
+            raise PlaylistValidationError(
+                f"Invalid Spotify playlist URL: {remote_url}. "
+                f"Expected format: https://open.spotify.com/playlist/... or spotify:playlist:..."
+            )
+        
+        return Playlist(
+            user=user,
+            title=data['title'].strip(),
+            description=data['description'].strip(),
+            genre=data['genre'].strip(),
+            tracks=None,  # No manual tracks for remote playlists
+            remote_playlist=remote_url,
+            remote_service='spotify',
+            filepath=filepath
+        )
+    
+    # Handle manual playlist (existing logic)
+    if not data['playlist'] or len(data['playlist']) == 0:
+        raise PlaylistValidationError("Field 'playlist' cannot be blank or empty")
 
     return Playlist(
         user=user,

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frozen Remote Playlists - Mixdiscs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MIXDISCS</h1>
+            <h2 class="subtitle">Frozen Remote Playlists</h2>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">← Back to Home</a>
+                <a href="all-playlists.html" class="nav-link">View All Playlists</a>
+            </div>
+        </header>
+    
+        <div class="frozen-info-banner">
+            <h3>⚠️ What are Frozen Playlists?</h3>
+            <p>
+                These remote playlists have been updated on Spotify but now exceed the 80-minute limit.
+                They're "frozen" at their last valid version until fixed by their owners.
+            </p>
+        </div>
+
+        {% if frozen_playlists %}
+            <p class="frozen-count">Showing {{ frozen_playlists|length }} frozen playlist(s)</p>
+            
+            <div class="frozen-list">
+                {% for processed_playlist in frozen_playlists %}
+                <div class="frozen-item">
+                    <div class="frozen-item-header">
+                        <div>
+                            <h3>
+                                <a href="index.html#playlist-{{ loop.index }}">
+                                    {{ processed_playlist.user_playlist.title }}
+                                </a>
+                                <a href="{{ processed_playlist.user_playlist.remote_playlist }}" 
+                                   class="remote-badge" 
+                                   target="_blank"
+                                   title="View on Spotify">
+                                    🔗 View on Spotify
+                                </a>
+                            </h3>
+                            <p class="frozen-item-meta">
+                                by <a href="user-{{ processed_playlist.user_playlist.user }}.html">{{ processed_playlist.user_playlist.user }}</a> | 
+                                Genre: <a href="genre-{{ processed_playlist.user_playlist.genre }}.html">{{ processed_playlist.user_playlist.genre }}</a>
+                            </p>
+                        </div>
+                        <div class="frozen-status">
+                            <span class="frozen-badge">FROZEN</span>
+                        </div>
+                    </div>
+                    
+                    {% if processed_playlist.validation_warning %}
+                    <div class="frozen-item-details">
+                        <div class="frozen-item-row">
+                            <div class="frozen-item-col">
+                                <h4>Frozen Information</h4>
+                                <table class="frozen-table">
+                                    <tr>
+                                        <td>Frozen on:</td>
+                                        <td><strong>{{ processed_playlist.validation_warning.frozen_at|datetime_format }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Showing version from:</td>
+                                        <td><strong>{{ processed_playlist.validation_warning.frozen_version_date|datetime_format }}</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div class="frozen-item-col">
+                                <h4>Duration Issue</h4>
+                                <table class="frozen-table">
+                                    <tr>
+                                        <td>Remote duration:</td>
+                                        <td>{{ processed_playlist.validation_warning.details.current_duration }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Duration limit:</td>
+                                        <td>{{ processed_playlist.validation_warning.details.limit }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Exceeded by:</td>
+                                        <td><span class="exceeded-badge">{{ processed_playlist.validation_warning.details.exceeded_by }}</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div class="frozen-item-col">
+                                <h4>Track Count</h4>
+                                <table class="frozen-table">
+                                    <tr>
+                                        <td>Remote tracks:</td>
+                                        <td>{{ processed_playlist.validation_warning.details.current_track_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cached tracks:</td>
+                                        <td>{{ processed_playlist.validation_warning.details.cached_track_count }}</td>
+                                    </tr>
+                                    {% if processed_playlist.validation_warning.details.current_track_count != processed_playlist.validation_warning.details.cached_track_count %}
+                                    <tr>
+                                        <td>Difference:</td>
+                                        <td><span class="track-diff-badge">+{{ processed_playlist.validation_warning.details.current_track_count - processed_playlist.validation_warning.details.cached_track_count }}</span></td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="frozen-item-action">
+                            💡 <strong>How to fix:</strong> Remove tracks on Spotify to get under 80 minutes. 
+                            The playlist will automatically unfreeze on the next update.
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-frozen">🎉 No frozen playlists! All remote playlists are up to date.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

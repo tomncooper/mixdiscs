@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Optional, Sequence
 
 from mixdiscer.playlists import Playlist
@@ -48,10 +48,21 @@ class MusicServicePlaylist:
 
 
 @dataclass
+class ValidationWarning:
+    """Warning about remote playlist validation failure"""
+    warning_type: str
+    message: str
+    details: dict
+    frozen_at: Optional[datetime] = None
+    frozen_version_date: Optional[datetime] = None
+
+
+@dataclass
 class ProcessedPlaylist:
     """ Dataclass representing a processed playlist with its total duration """
     user_playlist: Playlist
     music_service_playlists: list[MusicServicePlaylist]
+    validation_warning: Optional[ValidationWarning] = None
 
 
 def calculate_total_duration(tracks: Sequence[Optional[Track]]) -> timedelta:

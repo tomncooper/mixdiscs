@@ -1,6 +1,7 @@
 import logging
 
-from datetime import timedelta
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -18,7 +19,9 @@ from mixdiscer.music_service import (
     Track,
     MusicService,
     MusicServicePlaylist,
+    MusicServiceError,
     ProcessedPlaylist,
+    ValidationWarning,
 )
 from mixdiscer.music_service.spotify import SpotifyMusicService
 from mixdiscer.output.render import render_output
@@ -40,6 +43,16 @@ from mixdiscer.track_cache import (
 LOG = logging.getLogger(__name__)
 
 
+@dataclass
+class RemotePlaylistCheckResult:
+    """Result of checking a remote playlist for updates"""
+    music_service_playlist: MusicServicePlaylist
+    validation_warning: Optional[ValidationWarning]
+    should_update_cache: bool
+    cache_updates: dict
+    snapshot_id: Optional[str]
+
+
 def calculate_duration(tracks: list[Optional[Track]]) -> timedelta:
 
     total_duration = timedelta()
@@ -51,6 +64,194 @@ def calculate_duration(tracks: list[Optional[Track]]) -> timedelta:
         total_duration += track.duration
 
     return total_duration
+
+
+def _build_frozen_warning(cache_entry: dict, service_name: str) -> ValidationWarning:
+    """Build ValidationWarning from cached frozen state"""
+    frozen_reason = cache_entry.get('remote_frozen_reason', {})
+    return ValidationWarning(
+        warning_type=frozen_reason.get('type', 'unknown'),
+        message=(
+            f'This remote playlist exceeds the 80-minute limit on {service_name}. '
+            f'Showing last valid version.'
+        ),
+        details=frozen_reason,
+        frozen_at=datetime.fromisoformat(cache_entry['remote_frozen_at']),
+        frozen_version_date=datetime.fromisoformat(
+            cache_entry['music_services'][service_name]['cached_at']
+        )
+    )
+
+
+def check_remote_playlist_update(
+    playlist,
+    music_service: MusicService,
+    cache_entry: dict,
+    duration_threshold: timedelta
+) -> RemotePlaylistCheckResult:
+    """
+    Check if remote playlist has been updated and validate it.
+    
+    Returns RemotePlaylistCheckResult with:
+    - Playlist to use (cached or new)
+    - Warning if frozen
+    - Cache update instructions (but doesn't modify cache itself)
+    
+    Args:
+        playlist: User playlist object
+        music_service: Music service instance
+        cache_entry: Cache entry for this playlist
+        duration_threshold: Maximum allowed duration
+        
+    Returns:
+        RemotePlaylistCheckResult with playlist and cache update info
+        
+    Raises:
+        MusicServiceError: If critical music service operations fail
+        ValueError: If cache data is corrupted/invalid
+    """
+    # Validate cache entry has required fields
+    if not cache_entry.get('music_services'):
+        raise ValueError(f"Cache entry missing 'music_services' for {playlist.title}")
+    
+    cached_snapshot = cache_entry.get('remote_snapshot_id')
+    
+    # Get current snapshot from Spotify
+    try:
+        current_snapshot = music_service.get_playlist_snapshot(playlist.remote_playlist)
+    except MusicServiceError:
+        # Re-raise music service errors for caller to handle
+        raise
+    except Exception as e:
+        LOG.error("Unexpected error getting snapshot for %s: %s", playlist.title, e)
+        # Wrap in MusicServiceError for consistent error handling
+        raise MusicServiceError(
+            message=f"Failed to get snapshot: {e}",
+            service_name=music_service.name,
+            original_exception=e
+        ) from e
+    
+    # No change detected
+    if current_snapshot == cached_snapshot:
+        LOG.info("✓ Remote playlist unchanged: %s", playlist.title)
+        
+        # Check if this is a frozen playlist
+        warning = None
+        if cache_entry.get('remote_validation_status') == 'frozen':
+            warning = _build_frozen_warning(cache_entry, music_service.name)
+        
+        cached_playlist = get_cached_music_service_playlist(
+            get_cache_key(playlist),
+            music_service.name,
+            {'playlists': {get_cache_key(playlist): cache_entry}}
+        )
+        
+        return RemotePlaylistCheckResult(
+            music_service_playlist=cached_playlist,
+            validation_warning=warning,
+            should_update_cache=False,
+            cache_updates={},
+            snapshot_id=current_snapshot
+        )
+    
+    # Snapshot changed - fetch new version
+    LOG.info("⟳ Remote playlist changed: %s (snapshot: %s → %s)", 
+             playlist.title, 
+             cached_snapshot[:8] if cached_snapshot else 'none', 
+             current_snapshot[:8])
+    
+    try:
+        new_playlist = music_service.fetch_remote_playlist(playlist.remote_playlist)
+    except MusicServiceError:
+        # Re-raise music service errors
+        raise
+    except Exception as e:
+        LOG.error("Unexpected error fetching playlist %s: %s", playlist.title, e)
+        raise MusicServiceError(
+            message=f"Failed to fetch remote playlist: {e}",
+            service_name=music_service.name,
+            original_exception=e
+        ) from e
+    
+    current_track_count = len([t for t in new_playlist.tracks if t is not None])
+    
+    # Validate duration
+    if new_playlist.total_duration > duration_threshold:
+        # FREEZE - prepare cache updates but don't apply them
+        exceeded_by = new_playlist.total_duration - duration_threshold
+        
+        LOG.warning(
+            "⚠️  FROZEN: Remote playlist %s exceeds duration (using cached version)",
+            playlist.title
+        )
+        
+        # Get cached version for comparison
+        cached_playlist = get_cached_music_service_playlist(
+            get_cache_key(playlist),
+            music_service.name,
+            {'playlists': {get_cache_key(playlist): cache_entry}}
+        )
+        cached_track_count = len([t for t in cached_playlist.tracks if t is not None])
+        cached_at = datetime.fromisoformat(
+            cache_entry['music_services'][music_service.name]['cached_at']
+        )
+        frozen_at = datetime.now(timezone.utc)
+        
+        # Prepare cache updates (but don't modify cache_entry)
+        frozen_reason = {
+            'type': 'duration_exceeded',
+            'current_duration': str(new_playlist.total_duration),
+            'current_track_count': current_track_count,
+            'cached_track_count': cached_track_count,
+            'limit': str(duration_threshold),
+            'exceeded_by': str(exceeded_by),
+            'last_checked': frozen_at.isoformat()
+        }
+        
+        cache_updates = {
+            'remote_validation_status': 'frozen',
+            'remote_frozen_at': frozen_at.isoformat(),
+            'remote_frozen_reason': frozen_reason
+            # NOTE: Do NOT update remote_snapshot_id - keep checking on next render
+        }
+        
+        # Create warning
+        warning = ValidationWarning(
+            warning_type='duration_exceeded',
+            message=(
+                f'This remote playlist now exceeds the 80-minute limit on {music_service.name}. '
+                f'Showing last valid version.'
+            ),
+            details=frozen_reason,
+            frozen_at=frozen_at,
+            frozen_version_date=cached_at
+        )
+        
+        return RemotePlaylistCheckResult(
+            music_service_playlist=cached_playlist,
+            validation_warning=warning,
+            should_update_cache=True,
+            cache_updates=cache_updates,
+            snapshot_id=current_snapshot  # Don't update snapshot in cache
+        )
+    
+    # Valid update - unfrozen
+    LOG.info("✓ Remote playlist %s updated successfully", playlist.title)
+    
+    cache_updates = {
+        'remote_snapshot_id': current_snapshot,
+        'remote_validation_status': 'valid',
+        'remote_frozen_at': None,
+        'remote_frozen_reason': None
+    }
+    
+    return RemotePlaylistCheckResult(
+        music_service_playlist=new_playlist,
+        validation_warning=None,
+        should_update_cache=True,
+        cache_updates=cache_updates,
+        snapshot_id=current_snapshot
+    )
 
 
 def _load_rendering_config(config_path: str) -> tuple[str, Path, Path, timedelta, Path, Path]:
@@ -217,10 +418,13 @@ def validate_playlist(
                 # Use standard processing
                 music_service_playlist = music_service.process_user_playlist(playlist)
 
-        missing_tracks = [
-            playlist.tracks[i] for i, track in enumerate(music_service_playlist.tracks)
-            if track is None
-        ]
+        # Calculate missing tracks (only for manual playlists)
+        missing_tracks = []
+        if playlist.tracks:  # Only check for manual playlists
+            missing_tracks = [
+                playlist.tracks[i] for i, track in enumerate(music_service_playlist.tracks)
+                if track is None
+            ]
 
         is_valid = music_service_playlist.total_duration <= duration_threshold
 
@@ -228,7 +432,14 @@ def validate_playlist(
         if cache_path and is_valid and not used_cache:
             cache_data = load_cache(cache_path)
             cache_key = get_cache_key(playlist)
-            update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
+            # Get snapshot for remote playlists
+            snapshot_id = None
+            if playlist.remote_playlist:
+                try:
+                    snapshot_id = music_service.get_playlist_snapshot(playlist.remote_playlist)
+                except Exception as e:
+                    LOG.warning("Failed to get snapshot for %s: %s", playlist.title, e)
+            update_cache_entry(cache_key, playlist, music_service_playlist, cache_data, snapshot_id)
             save_cache(cache_data, cache_path)
             LOG.debug("Updated playlist cache for %s", playlist.title)
         
@@ -327,7 +538,8 @@ def render_all_playlists(config_path: str, skip_errors: bool = False, use_cache:
     
     LOG.info("Rendering all playlists from config %s", config_path)
     
-    mixdisc_directory, template_dir, output_dir, _, cache_path, track_cache_path = _load_rendering_config(config_path)
+    mixdisc_directory, template_dir, output_dir, duration_threshold, cache_path, track_cache_path = \
+        _load_rendering_config(config_path)
     music_service = _get_music_service()
     
     # Load caches from configured paths
@@ -336,8 +548,13 @@ def render_all_playlists(config_path: str, skip_errors: bool = False, use_cache:
     
     processed_playlists: list[ProcessedPlaylist] = []
     failed_playlists: list[tuple[str, Exception]] = []
+    
+    # Statistics
     cache_hits = 0
     cache_misses = 0
+    remote_snapshot_checks = 0
+    remote_frozen = 0
+    remote_unfrozen = 0
     
     # Get all playlists
     playlists = list(get_playlists(mixdisc_directory))
@@ -349,50 +566,167 @@ def render_all_playlists(config_path: str, skip_errors: bool = False, use_cache:
         try:
             cache_key = get_cache_key(playlist) if use_cache else None
             is_cache_hit = False
+            validation_warning = None
             
-            # Check cache validity
-            if cache_data and cache_key:
-                cache_entry = cache_data['playlists'].get(cache_key)
-                if cache_entry and is_cache_valid(playlist, cache_entry):
-                    cache_hits += 1
-                    is_cache_hit = True
-                    LOG.info("✓ [CACHE HIT] %s by %s", playlist.title, playlist.user)
+            # Handle remote playlists
+            if playlist.remote_playlist:
+                if cache_data and cache_key:
+                    cache_entry = cache_data['playlists'].get(cache_key, {})
+                    
+                    if cache_entry:
+                        # Check snapshot for remote playlist with error handling
+                        remote_snapshot_checks += 1
+                        try:
+                            result = check_remote_playlist_update(
+                                playlist,
+                                music_service,
+                                cache_entry,
+                                duration_threshold
+                            )
+                            
+                            # Extract results
+                            music_service_playlist = result.music_service_playlist
+                            validation_warning = result.validation_warning
+                            
+                            # Apply cache updates if needed
+                            if result.should_update_cache:
+                                # Track if this is a state transition
+                                old_status = cache_entry.get('remote_validation_status')
+                                new_status = result.cache_updates.get('remote_validation_status')
+                                
+                                for key, value in result.cache_updates.items():
+                                    cache_entry[key] = value
+                                
+                                # CRITICAL: Persist cache immediately after state change
+                                save_cache(cache_data, cache_path)
+                                LOG.debug("Persisted cache updates for %s", playlist.title)
+                                cache_updated = False  # Already saved
+                                
+                                # Log state transitions
+                                if new_status and new_status != old_status:
+                                    if new_status == 'frozen':
+                                        remote_frozen += 1
+                                        LOG.warning("⚠️  Remote playlist frozen: %s by %s", 
+                                                  playlist.title, playlist.user)
+                                    elif new_status == 'valid' and old_status == 'frozen':
+                                        remote_unfrozen += 1
+                                        LOG.info("✓ Remote playlist unfrozen: %s by %s", 
+                                               playlist.title, playlist.user)
+                            
+                        except MusicServiceError as e:
+                            # Music service errors - use cached version
+                            LOG.error(
+                                "Failed to check remote playlist update for '%s': %s. Using cached version.",
+                                playlist.title, e
+                            )
+                            music_service_playlist = get_cached_music_service_playlist(
+                                cache_key,
+                                music_service.name,
+                                cache_data
+                            )
+                            validation_warning = None
+                            
+                        except Exception as e:
+                            # Unexpected errors - log and skip playlist
+                            LOG.error(
+                                "Unexpected error processing remote playlist '%s': %s. Skipping.",
+                                playlist.title, e, exc_info=True
+                            )
+                            failed_playlists.append((playlist.title, e))
+                            continue
+                            
+                    else:
+                        # New remote playlist - fetch
+                        LOG.info("⟳ [NEW REMOTE] Processing %s by %s", playlist.title, playlist.user)
+                        cache_misses += 1
+                        try:
+                            music_service_playlist = music_service.fetch_remote_playlist(playlist.remote_playlist)
+                            
+                            # Get snapshot for cache
+                            try:
+                                snapshot_id = music_service.get_playlist_snapshot(playlist.remote_playlist)
+                                update_cache_entry(cache_key, playlist, music_service_playlist, cache_data, snapshot_id)
+                            except Exception as e:
+                                LOG.warning("Failed to get snapshot for %s: %s", playlist.title, e)
+                                update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
+                            
+                            save_cache(cache_data, cache_path)
+                            cache_updated = False  # Already saved
+                            validation_warning = None
+                            
+                        except MusicServiceError as e:
+                            LOG.error("Failed to fetch new remote playlist '%s': %s. Skipping.", 
+                                    playlist.title, e)
+                            failed_playlists.append((playlist.title, e))
+                            continue
+                        except Exception as e:
+                            LOG.error("Unexpected error fetching remote playlist '%s': %s. Skipping.",
+                                    playlist.title, e, exc_info=True)
+                            failed_playlists.append((playlist.title, e))
+                            continue
                 else:
-                    cache_misses += 1
-                    LOG.info("⟳ [CACHE MISS] Processing %s by %s", playlist.title, playlist.user)
-            
-            # Process playlist - use incremental if track cache available
-            if track_cache_data and hasattr(music_service, 'process_user_playlist_incremental'):
-                music_service_playlist = music_service.process_user_playlist_incremental(
-                    playlist,
-                    track_cache_data
-                )
+                    # No cache - fetch remote playlist
+                    try:
+                        music_service_playlist = music_service.fetch_remote_playlist(playlist.remote_playlist)
+                        validation_warning = None
+                    except MusicServiceError as e:
+                        LOG.error("Failed to fetch remote playlist '%s': %s. Skipping.", 
+                                playlist.title, e)
+                        failed_playlists.append((playlist.title, e))
+                        continue
+                    except Exception as e:
+                        LOG.error("Unexpected error fetching remote playlist '%s': %s. Skipping.",
+                                playlist.title, e, exc_info=True)
+                        failed_playlists.append((playlist.title, e))
+                        continue
+                
                 processed_playlist = ProcessedPlaylist(
                     user_playlist=playlist,
-                    music_service_playlists=[music_service_playlist]
+                    music_service_playlists=[music_service_playlist],
+                    validation_warning=validation_warning
                 )
+                
+            # Handle manual playlists (existing logic with track cache)
             else:
-                processed_playlist = _process_single_playlist(
-                    playlist,
-                    music_service,
-                    cache_key,
-                    cache_data
+                validation_warning = None
+                if cache_data and cache_key:
+                    cache_entry = cache_data['playlists'].get(cache_key)
+                    if cache_entry and is_cache_valid(playlist, cache_entry):
+                        cache_hits += 1
+                        is_cache_hit = True
+                        LOG.info("✓ [CACHE HIT] %s by %s", playlist.title, playlist.user)
+                    else:
+                        cache_misses += 1
+                        LOG.info("⟳ [CACHE MISS] Processing %s by %s", playlist.title, playlist.user)
+                
+                # Process with track cache if available
+                if track_cache_data and hasattr(music_service, 'process_user_playlist_incremental'):
+                    music_service_playlist = music_service.process_user_playlist_incremental(
+                        playlist,
+                        track_cache_data
+                    )
+                else:
+                    music_service_playlist = music_service.process_user_playlist(playlist)
+                
+                processed_playlist = ProcessedPlaylist(
+                    user_playlist=playlist,
+                    music_service_playlists=[music_service_playlist],
+                    validation_warning=validation_warning
                 )
+                
+                # Update cache if miss
+                if cache_data and cache_key and not is_cache_hit:
+                    update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
+                    cache_updated = True
+            
             processed_playlists.append(processed_playlist)
             
-            # Get the music service playlist (first one, as we only have Spotify now)
-            music_service_playlist = processed_playlist.music_service_playlists[0]
-            
-            # Update cache if this was a cache miss and caching is enabled
-            if cache_data and cache_key and not is_cache_hit:
-                update_cache_entry(cache_key, playlist, music_service_playlist, cache_data)
-                cache_updated = True
-            
             LOG.debug(
-                "Rendered: %s (duration: %s, tracks: %d)",
+                "Rendered: %s (duration: %s, tracks: %d)%s",
                 playlist.title,
-                music_service_playlist.total_duration,
-                len([t for t in music_service_playlist.tracks if t is not None])
+                processed_playlist.music_service_playlists[0].total_duration,
+                len([t for t in processed_playlist.music_service_playlists[0].tracks if t is not None]),
+                " [FROZEN]" if validation_warning else ""
             )
             
         except Exception as e:
@@ -433,6 +767,12 @@ def render_all_playlists(config_path: str, skip_errors: bool = False, use_cache:
         LOG.info("  Cache hits: %d", cache_hits)
         LOG.info("  Cache misses: %d", cache_misses)
         LOG.info("  Cache efficiency: %.1f%%", (cache_hits / len(playlists) * 100) if playlists else 0)
+    if remote_snapshot_checks > 0:
+        LOG.info("  Remote playlists checked: %d", remote_snapshot_checks)
+        if remote_frozen > 0:
+            LOG.warning("  Remote playlists frozen: %d", remote_frozen)
+        if remote_unfrozen > 0:
+            LOG.info("  Remote playlists unfrozen: %d", remote_unfrozen)
     LOG.info("  Output: %s/index.html", output_dir)
     
     if failed_playlists:

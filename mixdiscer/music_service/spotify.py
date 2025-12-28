@@ -1,4 +1,5 @@
 import logging
+import re
 
 from dataclasses import dataclass
 from datetime import timedelta
@@ -99,8 +100,148 @@ class SpotifyMusicService(MusicService):
             track_id=first_track['id'],
         )
 
+    def extract_playlist_id(self, url: str) -> str:
+        """
+        Extract playlist ID from Spotify URL or URI.
+        
+        Supports formats:
+        - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
+        - https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=...
+        - spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+        
+        Args:
+            url: Spotify playlist URL or URI
+            
+        Returns:
+            Playlist ID string
+            
+        Raises:
+            ValueError: If URL format is invalid
+        """
+        # Pattern for web URL
+        web_match = re.search(r'open\.spotify\.com/playlist/([a-zA-Z0-9]+)', url)
+        if web_match:
+            return web_match.group(1)
+        
+        # Pattern for URI
+        uri_match = re.search(r'spotify:playlist:([a-zA-Z0-9]+)', url)
+        if uri_match:
+            return uri_match.group(1)
+        
+        raise ValueError(f"Invalid Spotify playlist URL or URI: {url}")
+
+    def get_playlist_snapshot(self, playlist_url: str) -> str:
+        """
+        Get current snapshot_id for a playlist (lightweight metadata-only call).
+        
+        Args:
+            playlist_url: Spotify playlist URL or URI
+            
+        Returns:
+            Current snapshot_id string
+            
+        Raises:
+            MusicServiceError: If playlist cannot be accessed
+        """
+        try:
+            playlist_id = self.extract_playlist_id(playlist_url)
+            result = self.spotify.playlist(playlist_id, fields="snapshot_id")
+            return result['snapshot_id']
+        except Exception as e:
+            raise MusicServiceError(
+                message=f"Failed to get snapshot for playlist {playlist_url}: {e}",
+                service_name=self.name,
+                original_exception=e
+            ) from e
+
+    def fetch_remote_playlist(self, playlist_url: str) -> MusicServicePlaylist:
+        """
+        Fetch all tracks from a remote Spotify playlist.
+        
+        Handles pagination automatically for playlists >100 tracks.
+        
+        Args:
+            playlist_url: Spotify playlist URL or URI
+            
+        Returns:
+            MusicServicePlaylist with tracks and metadata
+            
+        Raises:
+            MusicServiceError: If playlist cannot be fetched
+        """
+        try:
+            playlist_id = self.extract_playlist_id(playlist_url)
+            
+            # Get playlist metadata
+            playlist_meta = self.spotify.playlist(playlist_id, fields="name,snapshot_id,tracks.total")
+            LOG.info("Fetching remote playlist: %s (%d tracks)", 
+                     playlist_meta['name'], playlist_meta['tracks']['total'])
+            
+            # Fetch tracks with pagination
+            tracks = []
+            offset = 0
+            limit = 100
+            
+            while True:
+                results = self.spotify.playlist_items(
+                    playlist_id,
+                    fields="items(track(id,name,artists,album,duration_ms,external_urls,uri)),next",
+                    limit=limit,
+                    offset=offset,
+                    additional_types=('track',)
+                )
+                
+                for item in results['items']:
+                    track_data = item.get('track')
+                    if not track_data or not track_data.get('id'):
+                        # Skip episodes or unavailable tracks
+                        tracks.append(None)
+                        continue
+                    
+                    # Convert to SpotifyTrack
+                    spotify_track = SpotifyTrack(
+                        artist=track_data['artists'][0]['name'] if track_data.get('artists') else 'Unknown',
+                        title=track_data['name'],
+                        album=track_data['album']['name'] if track_data.get('album') else 'Unknown',
+                        duration=timedelta(milliseconds=track_data['duration_ms']),
+                        link=track_data['external_urls']['spotify'],
+                        uri=track_data['uri'],
+                        track_id=track_data['id']
+                    )
+                    tracks.append(spotify_track)
+                
+                # Check if more pages
+                if results.get('next'):
+                    offset += limit
+                    LOG.debug("Fetching next page (offset: %d)", offset)
+                else:
+                    break
+            
+            total_duration = calculate_total_duration(tracks)
+            
+            LOG.info("Fetched %d tracks from remote playlist (total duration: %s)", 
+                     len(tracks), total_duration)
+            
+            return MusicServicePlaylist(
+                service_name=self.name,
+                tracks=tracks,
+                total_duration=total_duration
+            )
+            
+        except Exception as e:
+            raise MusicServiceError(
+                message=f"Failed to fetch remote playlist {playlist_url}: {e}",
+                service_name=self.name,
+                original_exception=e
+            ) from e
+
     def process_user_playlist(self, playlist) -> MusicServicePlaylist:
         """ Process a user playlist and return a MusicServicePlaylist """
+        
+        # Check if remote playlist
+        if playlist.remote_playlist:
+            LOG.info("Processing remote playlist: %s", playlist.title)
+            return self.fetch_remote_playlist(playlist.remote_playlist)
 
         tracks = []
         total_duration = timedelta()
@@ -144,6 +285,11 @@ class SpotifyMusicService(MusicService):
         Returns:
             MusicServicePlaylist with tracks and duration
         """
+        # Check if remote playlist
+        if playlist.remote_playlist:
+            LOG.info("Processing remote playlist: %s (incremental mode)", playlist.title)
+            return self.fetch_remote_playlist(playlist.remote_playlist)
+        
         from mixdiscer.track_cache import (
             get_cached_track,
             update_track_cache,

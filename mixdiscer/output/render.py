@@ -1,7 +1,7 @@
 import logging
 import shutil
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 from typing import Optional
@@ -86,8 +86,10 @@ def render_output(
     # Set up Jinja2 environment
     env = Environment(loader=FileSystemLoader(template_dir))
 
-    # Add custom filter
+    # Add custom filters
     env.filters['duration_format'] = duration_format
+    env.filters['datetime_format'] = lambda dt: dt.strftime('%B %d, %Y') if dt else 'Unknown'
+    env.filters['datetime_short'] = lambda dt: dt.strftime('%Y-%m-%d') if dt else 'Unknown'
 
     # Ensure output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -196,6 +198,37 @@ def render_output(
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_content)
     LOG.info("Genres index page written to %s", output_file)
+    
+    # Render frozen playlists page (always generate, even if empty)
+    frozen_playlists = [
+        p for p in processed_playlists 
+        if p.validation_warning is not None
+    ]
+    
+    # Sort frozen playlists by freeze date (most recent first)
+    if frozen_playlists:
+        frozen_sorted = sorted(
+            frozen_playlists, 
+            key=lambda p: p.validation_warning.frozen_at if p.validation_warning.frozen_at else datetime.min,
+            reverse=True
+        )
+    else:
+        frozen_sorted = []
+    
+    frozen_template = env.get_template("frozen-playlists.html.j2")
+    html_content = frozen_template.render(
+        frozen_playlists=frozen_sorted,
+        page_title="Frozen Remote Playlists"
+    )
+    
+    output_file = output_dir / "frozen-playlists.html"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    if frozen_playlists:
+        LOG.info("Frozen playlists page written to %s (%d frozen)", output_file, len(frozen_playlists))
+    else:
+        LOG.info("Frozen playlists page written to %s (no frozen playlists)", output_file)
 
     LOG.info("HTML output successfully rendered with %d playlists", len(processed_playlists))
 

@@ -14,12 +14,14 @@
             {% if show_all_link %}
             <div class="nav-links">
                 <a href="index.html" class="nav-link">← Back to Recent</a>
+                <a href="frozen-playlists.html" class="nav-link">⚠️ Frozen Playlists</a>
             </div>
             {% else %}
             <div class="nav-links">
                 <a href="all-playlists.html" class="nav-link">View All Playlists →</a>
                 <a href="users.html" class="nav-link">Browse by User</a>
                 <a href="genres.html" class="nav-link">Browse by Genre</a>
+                <a href="frozen-playlists.html" class="nav-link">⚠️ Frozen Playlists</a>
             </div>
             {% endif %}
         </header>
@@ -34,7 +36,88 @@
                 <div class="playlist-header collapsed">
                     <div class="playlist-header-content">
                         <div>
-                            <h2 class="playlist-title">{{ processed_playlist.user_playlist.title }}</h2>
+                            <h2 class="playlist-title">
+                                {{ processed_playlist.user_playlist.title }}
+                                
+                                {% if processed_playlist.validation_warning %}
+                                <span class="warning-icon" data-tooltip="true" aria-label="Validation warning">
+                                    ⚠️
+                                    <div class="tooltip">
+                                        <strong>⚠️ Validation Warning</strong>
+                                        <p>{{ processed_playlist.validation_warning.message }}</p>
+                                        
+                                        {% if processed_playlist.validation_warning.details %}
+                                        <div class="warning-details">
+                                            <table>
+                                                <tr>
+                                                    <td>Frozen on:</td>
+                                                    <td><strong>{{ processed_playlist.validation_warning.frozen_at|datetime_format }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cached version from:</td>
+                                                    <td><strong>{{ processed_playlist.validation_warning.frozen_version_date|datetime_format }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><hr style="margin: 8px 0; border-color: #d39e00;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Remote duration:</td>
+                                                    <td>{{ processed_playlist.validation_warning.details.current_duration }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Duration limit:</td>
+                                                    <td>{{ processed_playlist.validation_warning.details.limit }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Exceeded by:</td>
+                                                    <td><span class="exceeded">{{ processed_playlist.validation_warning.details.exceeded_by }}</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><hr style="margin: 8px 0; border-color: #d39e00;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Remote tracks:</td>
+                                                    <td>{{ processed_playlist.validation_warning.details.current_track_count }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Showing tracks:</td>
+                                                    <td>{{ processed_playlist.validation_warning.details.cached_track_count }}</td>
+                                                </tr>
+                                                {% if processed_playlist.validation_warning.details.current_track_count != processed_playlist.validation_warning.details.cached_track_count %}
+                                                <tr>
+                                                    <td>Track difference:</td>
+                                                    <td><span class="track-diff">+{{ processed_playlist.validation_warning.details.current_track_count - processed_playlist.validation_warning.details.cached_track_count }} tracks</span></td>
+                                                </tr>
+                                                {% endif %}
+                                            </table>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        <p class="warning-action">
+                                            💡 Fix this by removing tracks on 
+                                            <a href="{{ processed_playlist.user_playlist.remote_playlist }}" target="_blank">Spotify</a> 
+                                            to get under 80 minutes.
+                                        </p>
+                                    </div>
+                                </span>
+                                {% endif %}
+                                
+                                {% if processed_playlist.user_playlist.remote_playlist %}
+                                <a href="{{ processed_playlist.user_playlist.remote_playlist }}" 
+                                   class="remote-badge" 
+                                   target="_blank"
+                                   title="View on Spotify">
+                                    🔗 Remote
+                                </a>
+                                {% endif %}
+                            </h2>
+                            
+                            {% if processed_playlist.validation_warning %}
+                            <div class="frozen-notice">
+                                📌 Showing cached version from {{ processed_playlist.validation_warning.frozen_version_date|datetime_short }}
+                            </div>
+                            {% endif %}
+                            
                             <div class="playlist-meta">
                                 by <a href="user-{{ processed_playlist.user_playlist.user }}.html">{{ processed_playlist.user_playlist.user }}</a> | 
                                 Genre: <a href="genre-{{ processed_playlist.user_playlist.genre }}.html">{{ processed_playlist.user_playlist.genre }}</a>

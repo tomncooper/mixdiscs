@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2025-12-21T17:48:54.373079+00:00",
+  "last_updated": "2025-12-27T18:39:20.433063+00:00",
   "playlists": {
     "MixMasterTest/Testy McTest List": {
       "user": "MixMasterTest",
@@ -296,63 +296,113 @@
       },
       "cached_at": "2025-12-21T17:47:17.504670+00:00"
     },
-    "TestUser/Album Test": {
-      "user": "TestUser",
-      "title": "Album Test",
-      "filepath": "mixdiscs/TestUser/TestUser - Album Test.yaml",
-      "content_hash": "1120f3f70dbcaf6dd4689792cda3d8de2d5e391ab4f5a1939575a8754d06dff6",
+    "MixMasterTest/Classical McClassicFace": {
+      "user": "MixMasterTest",
+      "title": "Classical McClassicFace",
+      "filepath": "mixdiscs/MixMasterTest/Classical-McClassicFace.yaml",
+      "content_hash": "777f5d41db4f0d0dffb69c4543eb1d41cdc9260001c3eb1b5e73c0b9ef69302c",
       "music_services": {
         "spotify": {
-          "total_duration_seconds": 1721,
+          "total_duration_seconds": 1706,
           "tracks": [
             {
-              "artist": "Queen",
-              "title": "Bohemian Rhapsody",
-              "album": "Bohemian Rhapsody (The Original Soundtrack)",
-              "duration_seconds": 354,
-              "link": "https://open.spotify.com/track/3z8h0TU7ReDPLIbEnYhWZb"
-            },
-            {
-              "artist": "Queen",
-              "title": "Bohemian Rhapsody - Remastered 2011",
-              "album": "A Night At The Opera (2011 Remaster)",
-              "duration_seconds": 354,
-              "link": "https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+              "artist": "Ralph Vaughan Williams",
+              "title": "Fantasia on Greensleeves",
+              "album": "50 Revision Classics by Classic FM",
+              "duration_seconds": 255,
+              "link": "https://open.spotify.com/track/0TjyZhWteS8AI6m3puYCse",
               "service_specific": {
-                "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
-                "track_id": "4u7EnebtmKWzUH433cf5Qv"
+                "uri": "spotify:track:0TjyZhWteS8AI6m3puYCse",
+                "track_id": "0TjyZhWteS8AI6m3puYCse"
               }
             },
             {
-              "artist": "Pink Floyd",
-              "title": "Comfortably Numb",
-              "album": "The Wall",
-              "duration_seconds": 382,
-              "link": "https://open.spotify.com/track/5HNCy40Ni5BZJFw1TKzRsC"
-            },
-            {
-              "artist": "David Bowie",
-              "title": "Heroes",
-              "album": "\"Heroes\" (2017 Remaster)",
-              "duration_seconds": 371,
-              "link": "https://open.spotify.com/track/7Jh1bpe76CNTCgdgAdBw4Z"
-            },
-            {
-              "artist": "The Beatles",
-              "title": "Come Together - Remastered 2009",
-              "album": "Abbey Road (Remastered)",
-              "duration_seconds": 259,
-              "link": "https://open.spotify.com/track/2EqlS6tkEnglzr7tkKAAYD",
+              "artist": "Classical Study Music",
+              "title": "Hungarian Dance No. 5 in G Minor (Johannes Brahms)",
+              "album": "Classical Study Music, Vol. 2 (25 Calm and Soft Famous Classical Music Pieces for Studying and Reading)",
+              "duration_seconds": 156,
+              "link": "https://open.spotify.com/track/6ilszibex1V2jMcpEjfIjv",
               "service_specific": {
-                "uri": "spotify:track:2EqlS6tkEnglzr7tkKAAYD",
-                "track_id": "2EqlS6tkEnglzr7tkKAAYD"
+                "uri": "spotify:track:6ilszibex1V2jMcpEjfIjv",
+                "track_id": "6ilszibex1V2jMcpEjfIjv"
+              }
+            },
+            {
+              "artist": "Antonio Vivaldi",
+              "title": "Le quattro stagioni (The Four Seasons), Op. 8 - Concerto No. 2 in G Minor, RV 315, \"L'estate\" (Summer): III. Presto (Tempo impetuoso d'estate)",
+              "album": "Vivaldi: The Greatest Violin Works",
+              "duration_seconds": 163,
+              "link": "https://open.spotify.com/track/1IPQUBb2E4FjmBSZvkIXNp",
+              "service_specific": {
+                "uri": "spotify:track:1IPQUBb2E4FjmBSZvkIXNp",
+                "track_id": "1IPQUBb2E4FjmBSZvkIXNp"
+              }
+            },
+            {
+              "artist": "Michael Nyman",
+              "title": "The Heart Asks Pleasure First",
+              "album": "The Piano Sings",
+              "duration_seconds": 225,
+              "link": "https://open.spotify.com/track/7A7JKxTKfbyKBKXD5vDPAA",
+              "service_specific": {
+                "uri": "spotify:track:7A7JKxTKfbyKBKXD5vDPAA",
+                "track_id": "7A7JKxTKfbyKBKXD5vDPAA"
+              }
+            },
+            {
+              "artist": "Aaron Copland",
+              "title": "Rodeo: No. 5, Hoe-Down",
+              "album": "Copland: Billy the Kid, Rodeo, El Sal\u00f3n M\u00e9xico & An Outdoor Overture",
+              "duration_seconds": 248,
+              "link": "https://open.spotify.com/track/6s4fr2jtde9hGhFSLMpv77",
+              "service_specific": {
+                "uri": "spotify:track:6s4fr2jtde9hGhFSLMpv77",
+                "track_id": "6s4fr2jtde9hGhFSLMpv77"
+              }
+            },
+            {
+              "artist": "Aaron Copland",
+              "title": "Appalachian Spring: VII. Doppio movimento",
+              "album": "Copland: Appalachian Spring, Rodeo, Billy the Kid & Fanfare for the Common Man",
+              "duration_seconds": 183,
+              "link": "https://open.spotify.com/track/6vS8JCT9WqTFeAuu8smjRF",
+              "service_specific": {
+                "uri": "spotify:track:6vS8JCT9WqTFeAuu8smjRF",
+                "track_id": "6vS8JCT9WqTFeAuu8smjRF"
+              }
+            },
+            {
+              "artist": "John Brunning",
+              "title": "Pie Jesu",
+              "album": "Into Paradise",
+              "duration_seconds": 275,
+              "link": "https://open.spotify.com/track/74lNdcuxQVMFdLRL4IzCAe",
+              "service_specific": {
+                "uri": "spotify:track:74lNdcuxQVMFdLRL4IzCAe",
+                "track_id": "74lNdcuxQVMFdLRL4IzCAe"
+              }
+            },
+            {
+              "artist": "Euan Stevenson",
+              "title": "Air In D Minor",
+              "album": "Air In D Minor",
+              "duration_seconds": 199,
+              "link": "https://open.spotify.com/track/4EUjCt2fwf44WHrT0OL03C",
+              "service_specific": {
+                "uri": "spotify:track:4EUjCt2fwf44WHrT0OL03C",
+                "track_id": "4EUjCt2fwf44WHrT0OL03C"
               }
             }
           ],
-          "cached_at": "2025-12-21T17:48:54.372980+00:00"
+          "cached_at": "2025-12-27T18:39:20.431182+00:00"
         }
       },
-      "cached_at": "2025-12-21T17:48:19.968565+00:00"
+      "cached_at": "2025-12-27T18:39:20.430920+00:00",
+      "remote_playlist_url": "https://open.spotify.com/playlist/6Jffb6Yv0nFwP2KoEmiLaZ",
+      "remote_snapshot_id": "AAAACw+hRPRl9LRbG1lnHOnTg7lqMJ+S",
+      "remote_validation_status": "valid",
+      "remote_frozen_at": null,
+      "remote_frozen_reason": null
     }
   }
 }

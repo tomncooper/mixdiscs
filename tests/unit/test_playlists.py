@@ -324,7 +324,7 @@ genre: Rock
 playlist: []
 """)
     
-    with pytest.raises(PlaylistValidationError, match="'playlist' cannot be blank or empty"):
+    with pytest.raises(PlaylistValidationError, match="Must specify either 'playlist' or 'remote_playlist'"):
         load_playlist(playlist_path)
 
 

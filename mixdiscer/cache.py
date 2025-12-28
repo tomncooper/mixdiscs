@@ -163,7 +163,8 @@ def update_cache_entry(
     cache_key: str,
     playlist: Playlist,
     music_service_playlist: MusicServicePlaylist,
-    cache_data: dict
+    cache_data: dict,
+    snapshot_id: Optional[str] = None
 ) -> None:
     """
     Update cache entry for a specific music service.
@@ -174,6 +175,7 @@ def update_cache_entry(
         playlist: Playlist object
         music_service_playlist: Processed music service playlist
         cache_data: Cache data dictionary (modified in place)
+        snapshot_id: Optional Spotify snapshot_id for remote playlists
     """
     if cache_key not in cache_data['playlists']:
         cache_data['playlists'][cache_key] = {
@@ -190,6 +192,22 @@ def update_cache_entry(
     # Update content hash in case playlist was modified
     playlist_entry['content_hash'] = compute_playlist_hash(playlist.filepath)
     playlist_entry['filepath'] = str(playlist.filepath)
+    
+    # Update remote playlist metadata if applicable
+    if playlist.remote_playlist:
+        playlist_entry['remote_playlist_url'] = playlist.remote_playlist
+        if snapshot_id:
+            playlist_entry['remote_snapshot_id'] = snapshot_id
+        playlist_entry['remote_validation_status'] = 'valid'
+        playlist_entry['remote_frozen_at'] = None
+        playlist_entry['remote_frozen_reason'] = None
+    else:
+        # Clear remote fields for manual playlists
+        playlist_entry['remote_playlist_url'] = None
+        playlist_entry['remote_snapshot_id'] = None
+        playlist_entry['remote_validation_status'] = None
+        playlist_entry['remote_frozen_at'] = None
+        playlist_entry['remote_frozen_reason'] = None
     
     # Serialize tracks
     serialized_tracks = []
