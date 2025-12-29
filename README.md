@@ -7,11 +7,21 @@
 \_|  |_/|_|/_/\_\___/  |_|___/\___||___/
 ```
 
-Playlist sharing....but nerdier!
+There are plenty of playlist sharing sites, but how many of them let you share playlists via pull requests!?
+As if that wasn't enough the playlists on this site have a strict length requirement.
+Every playlist must be **under 80 minutes**! 
+Why? 
+Because that is the length of a [MiniDisc](https://www.minidisc.wiki/) or CD-R.
+Yes, some people still use phyical recording media and we want something to record onto them!
 
-You can add your playlist via a pull request, the CI will check the specified music service (currently ony Spotify but more are coming) to find the songs and, this is the crucial part, make sure it is less than 80 minuets long. Than's it, you have 80 mins, the length of a [MiniDisc](https://en.wikipedia.org/wiki/MiniDisc) (told you it was nerdy) or a CD-R (remember them).
+The other unique thing about Mixdiscs is it all runs out of the GitHub repo. 
+There is no database or backend, all the data is in the repo and updated via GitHub actions.
+So if you want your own copy, fork away!
 
-Your playlists will be checked in CI to make sure the tracks exist and you have meet the length criteria then it will be rendered in all its glory on [mixdiscs.com](https://mixdiscs.com/). I am working on the auto-generated MiniDiscs... 
+You can add your playlist via a pull request (either a list of song titles or a link to playlist on a music service).
+The CI will check the specified music service (currently ony Spotify but more are coming) to find the songs/playlist and, this is the crucial part, make sure it is less than 80 minuets long. 
+Than's it, you have 80 mins, make them count!
+
 
 ## Table of Contents
 

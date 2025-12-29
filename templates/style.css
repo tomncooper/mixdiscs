@@ -86,6 +86,19 @@ h2.subtitle {
     border-color: var(--cyan);
 }
 
+.nav-link.cta-link {
+    background-color: var(--green);
+    color: var(--base03);
+    border-color: var(--green);
+    font-weight: bold;
+}
+
+.nav-link.cta-link:hover {
+    background-color: var(--cyan);
+    color: var(--base03);
+    border-color: var(--cyan);
+}
+
 .playlist {
     background-color: var(--base02);
     margin-bottom: 25px;
