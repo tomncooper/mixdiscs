@@ -8,6 +8,7 @@ dependencies = [
     "jinja2>=3.1.6",
     "pyyaml>=6.0.2",
     "spotipy>=2.25.0",
+    "questionary>=2.0.0",
 ]
 
 [dependency-groups]
@@ -28,7 +29,11 @@ test = [
 pyyaml-build = ["cython<3", "setuptools"]
 
 [tool.uv]
+package = true
 no-build-isolation-package = ["pyyaml"]
+
+[tool.setuptools]
+packages = ["mixdiscer", "mixdiscer.cli", "mixdiscer.music_service", "mixdiscer.output"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -68,4 +73,7 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+[project.scripts]
+create-playlist = "mixdiscer.create_playlist:main"
 

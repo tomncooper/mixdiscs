@@ -11,6 +11,7 @@ TEMPLATE_DIR_CONFIG = "template_directory"
 OUTPUT_DIR_CONFIG = "output_directory"
 CACHE_FILE_CONFIG = "cache_file"
 TRACK_CACHE_FILE_CONFIG = "track_cache_file"
+SUGGESTED_GENRES_CONFIG = "suggested_genres"
 
 
 def load_config(filepath: str):

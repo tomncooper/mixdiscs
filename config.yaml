@@ -4,3 +4,24 @@ template_directory: templates
 output_directory: site_files
 cache_file: .playlist_cache/playlists_cache.json
 track_cache_file: .playlist_cache/tracks_cache.json
+suggested_genres:
+  - rock
+  - pop
+  - electronic
+  - hip-hop
+  - jazz
+  - classical
+  - indie
+  - metal
+  - r&b
+  - country
+  - folk
+  - blues
+  - reggae
+  - punk
+  - soul
+  - alternative
+  - dance
+  - funk
+  - house
+  - techno

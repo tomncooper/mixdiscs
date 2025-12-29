@@ -34,6 +34,35 @@ Than's it, you have 80 mins, make them count!
 
 You can contribute playlists in two ways: **manual playlists** or **remote playlists**.
 
+### Quick Start: Using the CLI Generator
+
+The easiest way to create a playlist is using the interactive CLI tool, you will need python and the [uv](https://docs.astral.sh/uv/) tool installed:
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd mixdiscs
+
+# Install dependencies
+uv sync
+
+# Run the playlist generator
+uv run create-playlist
+```
+
+The CLI will guide you through:
+1. **User Type**: New or existing user
+2. **Username**: 
+   - Existing: Search/select from existing users
+   - New: Enter a new username
+3. **Playlist Type**: Manual (list tracks) or Remote (Spotify URL)
+4. **Details**: Title, description, genre
+5. **Generation**: Creates the YAML file in the correct location
+
+### Manual Method
+
+If you prefer to create files manually:
+
 ### Option 1: Manual Playlist
 
 1. Create a folder with your username in the `mixdiscs/` directory: `mixdiscs/YourUsername/`
