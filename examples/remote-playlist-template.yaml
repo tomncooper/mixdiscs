@@ -1,0 +1,28 @@
+# Copy this template and rename it to: mixdiscs/<your-username>/<your-playlist-title>.yaml
+# Example: mixdiscs/SpotifyUser/My_Curated_Mix.yaml
+
+# Your username - MUST match the folder name exactly (case-sensitive)
+user: YourUsername
+
+# The title of your playlist (can be different from the Spotify playlist name)
+title: Your Playlist Title
+
+# A brief description of what this playlist is about
+description: A description of your playlist - what's the vibe, theme, or story?
+
+# Genre: rock, pop, electronic, hip-hop, jazz, classical, indie, metal, etc.
+genre: electronic
+
+# Paste your Spotify playlist URL here
+# You can get this by:
+# 1. Opening Spotify
+# 2. Right-clicking on your playlist
+# 3. Selecting "Share" → "Copy link to playlist"
+remote_playlist: https://open.spotify.com/playlist/YOUR_PLAYLIST_ID_HERE
+
+# IMPORTANT NOTES:
+# - Your Spotify playlist MUST be public (not private)
+# - The playlist must be under 80 minutes
+# - If you update your Spotify playlist after submission:
+#   - If it stays ≤ 80 minutes: It will update automatically ✅
+#   - If it exceeds 80 minutes: It will be frozen at the last valid version 🧊

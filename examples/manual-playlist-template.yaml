@@ -1,0 +1,28 @@
+# Copy this template and rename it to: mixdiscs/<your-username>/<your-playlist-title>.yaml
+# Example: mixdiscs/MusicLover123/Summer_Vibes_2024.yaml
+
+# Your username - MUST match the folder name exactly (case-sensitive)
+user: YourUsername
+
+# The title of your playlist
+title: Your Awesome Playlist Title
+
+# A brief description of what this playlist is about
+description: A description of your playlist - what's the vibe, theme, or story?
+
+# Genre: rock, pop, electronic, hip-hop, jazz, classical, indie, metal, etc.
+genre: rock
+
+# List your tracks below using "Artist - Song Title" format
+# Make sure there's a space before and after the dash
+# Keep the total duration under 80 minutes!
+playlist:
+  - The Beatles - Come Together
+  - Queen - Bohemian Rhapsody
+  # Add more tracks here...
+  # Remember: Total duration must be ≤ 80 minutes
+
+# Tips:
+# - Each track should be on a new line starting with "  - " (two spaces, dash, space)
+# - Use the exact artist and song names for best Spotify matching
+# - You can include album names if needed: "Artist - Song Title | Album Name"
